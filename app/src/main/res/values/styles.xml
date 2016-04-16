@@ -1,0 +1,43 @@
+<resources xmlns:android="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="alertDialogTheme">@style/MyAlertDialogTheme</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="MyToolBarTheme" parent="@style/AppTheme.NoActionBar">
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+    </style>
+
+    <style name="MyAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/white</item>
+        <item name="android:background">@color/gray</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:windowTitleStyle">@style/MyAlertDialogTitle</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="background">@color/gray</item>
+    </style>
+
+    <style name="MyAlertDialogTitle" parent="Base.DialogWindowTitle.AppCompat">
+        <item name="android:textColor">@color/mint</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>
