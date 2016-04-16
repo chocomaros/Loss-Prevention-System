@@ -1,5 +1,7 @@
 package com.example.yena.losspreventionsystem;
 
+import android.database.Cursor;
+
 import java.util.ArrayList;
 
 /**
@@ -9,14 +11,17 @@ public class GroupInfo {
 
     int id;
     String name;
-    ArrayList<Integer> itemList;
 
     public GroupInfo(){
 
     }
-    public GroupInfo(int id, String name, ArrayList<Integer> itemList){
+    public GroupInfo(int id, String name){
         this.id = id;
         this.name = name;
-        this.itemList = itemList;
+    }
+
+    public GroupInfo(Cursor cursor){
+        id = cursor.getInt(0);
+        name = cursor.getString(1);
     }
 }

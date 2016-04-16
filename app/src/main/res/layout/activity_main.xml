@@ -26,16 +26,16 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv_toolbar_title"
+                    <ImageView
+                        android:id="@+id/iv_toolbar_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_gravity="center"
-                        android:text="Toolbar Title"
-                        android:textColor="@color/textColorPrimary" />
+                        android:background="@drawable/image_title"
+                        android:layout_toLeftOf="@+id/ib_edit" />
 
                     <ImageButton
                         android:id="@+id/ib_edit"
@@ -44,7 +44,7 @@
                         android:layout_toLeftOf="@+id/ib_alarm"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
-                        android:background="@drawable/ic_edit" />
+                        android:background="@drawable/ic_edit"/>
                     <ImageButton
                         android:id="@+id/ib_alarm"
                         android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
-                        android:background="@drawable/ic_alarm_on" />
+                        android:background="@drawable/ic_alarm_on"/>
 
                 </RelativeLayout>
 

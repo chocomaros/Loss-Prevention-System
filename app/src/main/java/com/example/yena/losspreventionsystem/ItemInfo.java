@@ -1,5 +1,7 @@
 package com.example.yena.losspreventionsystem;
 
+import android.database.Cursor;
+
 import java.util.ArrayList;
 
 /**
@@ -10,23 +12,27 @@ public class ItemInfo {
     public static final int  DISABLE = 0, ALARM_OFF = 1, ALARM_SILENT = 2,
             ALARM_VIBRATION = 3, ALARM_SOUND = 4, ALARM_SOUND_VIBRATION = 5;
 
-    int beaconID;
+
+    String beaconID;
     String name;
     double distance;
-    ArrayList<Integer> groupList = new ArrayList<>();
     int alarmStatus;
 
     public ItemInfo(){
 
     }
     //TODO 더 해줘야함!!!
-    public ItemInfo(String name, double distance, ArrayList<Integer> groupList, int alarmStatus){
+    public ItemInfo(String beaconID, String name, double distance, int alarmStatus){
+        this.beaconID = beaconID;
         this.name = name;
         this.distance = distance;
-        this.groupList.addAll(groupList);
         this.alarmStatus = alarmStatus;
     }
 
-//    ArrayList<String> groupListToString(){
-//    }
+    public ItemInfo(Cursor cursor){
+        beaconID = cursor.getString(0);
+        name = cursor.getString(1);
+        distance = cursor.getDouble(2);
+        alarmStatus = cursor.getInt(3);
+    }
 }

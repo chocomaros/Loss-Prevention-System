@@ -17,6 +17,7 @@ public class InformationFragment extends Fragment {
 
     ArrayList<ItemInfo> itemList = new ArrayList<>();
     InformationAdapter adapter;
+    boolean check = false;
 
     public InformationFragment() {
 
@@ -24,17 +25,22 @@ public class InformationFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ArrayList<Integer> arrayList = new ArrayList<>();
-        arrayList.add(1);
-        arrayList.add(2);
-        ItemInfo item1 = new ItemInfo("a",20,arrayList,ItemInfo.ALARM_OFF);
-        ItemInfo item2 = new ItemInfo("b",30,arrayList,ItemInfo.ALARM_SILENT);
-        ItemInfo item3 = new ItemInfo("c",40,arrayList,ItemInfo.ALARM_SOUND);
-        itemList.add(item1);
-        itemList.add(item2);
-        itemList.add(item3);
-        Log.d("item1", " name : " + item1.name + " distance : " + item1.distance + " group : " + item1.groupList.get(0) + " alarmStatus : " + item1.alarmStatus);
-        adapter = new InformationAdapter(itemList);
+        ArrayList<ItemInfo> arrayList = new ArrayList<ItemInfo>();
+//        ItemInfo item1 = new ItemInfo("10203","fff",20,ItemInfo.ALARM_OFF);
+//        ItemInfo item2 = new ItemInfo("ad2034","asdf",30,ItemInfo.ALARM_SILENT);
+//        ItemInfo item3 = new ItemInfo("afds32","cvz",40,ItemInfo.ALARM_SOUND);
+//        itemList.add(item1);
+//        itemList.add(item2);
+//        itemList.add(item3);
+//            for (int i = 0; i < itemList.size(); i++) {
+//                LPSDAO.insertItemInfo(getContext(), itemList.get(i));
+//            }
+        arrayList = LPSDAO.getItemInfo(getContext());
+        for(int i=0;i<arrayList.size();i++){
+            Log.d("arrayList.get(0)", arrayList.get(i).name);
+        }
+
+        adapter = new InformationAdapter(arrayList);
         super.onCreate(savedInstanceState);
     }
 

@@ -28,9 +28,9 @@ public class GroupFragment extends Fragment {
         ArrayList<Integer> arrayList = new ArrayList<>();
         arrayList.add(1);
         arrayList.add(2);
-        GroupInfo group1 = new GroupInfo(1,"첫번째",arrayList);
-        GroupInfo group2 = new GroupInfo(2,"두번째",arrayList);
-        GroupInfo group3 = new GroupInfo(3,"세번째",arrayList);
+        GroupInfo group1 = new GroupInfo(1,"첫번째");
+        GroupInfo group2 = new GroupInfo(2,"두번째");
+        GroupInfo group3 = new GroupInfo(3,"세번째");
         groupList.add(group1);
         groupList.add(group2);
         groupList.add(group3);

@@ -1,5 +1,6 @@
 package com.example.yena.losspreventionsystem;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,7 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
     private TextView tvName, tvDistance, tvGroup;
     private ImageButton ibSilent, ibVibration, ibSound, ibSoundVibration;
     private Button btDisable;
-    private String groupName = "";
+    private Context context;
 
     public InformationAdapter(){
 
@@ -34,8 +35,11 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
         ItemInfo itemInfo = itemList.get(position);
         tvName.setText(itemInfo.name);
         tvDistance.setText("거리 : "+itemInfo.distance);
-        for(int i=0;i<itemInfo.groupList.size();i++) { //TODO 디비에서 그룹리스트 받아와서 그 id에 맞는 이름 찾아와야함
-            groupName.concat(" "+itemInfo.groupList.get(i));
+        ArrayList<GroupInfo> groupList = new ArrayList<GroupInfo>();
+        groupList = LPSDAO.getGroupListOfItem(context,itemList.get(position));
+        String groupName = null;
+        for(int i=0;i<groupList.size();i++) {
+            groupName.concat(" " +groupList.get(i).name);
             tvGroup.setText("그룹 :"+groupName);
         }
     }
@@ -47,7 +51,8 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_item_info,parent,false);
+        context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.card_item_info,parent,false);
         return new ViewHolder(view);
     }
 
