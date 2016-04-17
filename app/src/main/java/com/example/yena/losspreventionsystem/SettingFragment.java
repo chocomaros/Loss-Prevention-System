@@ -38,8 +38,8 @@ public class SettingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_setting, null);
-        pref = getActivity().getSharedPreferences("pref", 0);
-        originalValue = pref.getInt("DistanceSetting", DISTANCE1);
+        pref = getActivity().getSharedPreferences(LPSSharedPreferences.NAME, 0);
+        originalValue = pref.getInt(LPSSharedPreferences.DISTANCE_SETTING, DISTANCE1);
 
         tvAlarmDistanceSetting = (TextView)view.findViewById(R.id.tv_distance_setting);
         tvAlarmDistanceValue = (TextView)view.findViewById(R.id.tv_distance_setting_value);
