@@ -18,6 +18,20 @@
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
     </style>
 
+    <style name="AlarmDistanceDialogTheme" parent="Base.Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/mint</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:windowTitleStyle">@style/AlarmDistanceDialogTitle</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="AlarmDistanceDialogTitle" parent="Base.DialogWindowTitle.AppCompat">
+        <item name="android:background">@color/mint</item>
+        <item name="android:windowBackground">@color/mint</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="MyAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/white</item>
         <item name="android:background">@color/gray</item>

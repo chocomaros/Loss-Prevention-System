@@ -5,9 +5,6 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -38,11 +35,11 @@ public class LoginActivity extends AppCompatActivity {
         btLogin = (Button)findViewById(R.id.bt_login);
         btSignUp = (Button)findViewById(R.id.bt_sign_up);
 
-        pref = getSharedPreferences("pref",0);
+        pref = getSharedPreferences(LPSSharedPreferences.NAME,0);
 
-        if(pref.getBoolean("AutoLogin", false)){ /// 이미 자동로그인 되어있을 경우
-            id = pref.getString("ID", "");
-            password = pref.getString("PW", "");
+        if(pref.getBoolean(LPSSharedPreferences.AUTO_LOGIN, false)){ /// 이미 자동로그인 되어있을 경우
+            id = pref.getString(LPSSharedPreferences.USER_ID, "");
+            password = pref.getString(LPSSharedPreferences.USER_PW, "");
             etInputID.setText(id);
             etInputPW.setText(password);
             cbAutoLogin.setChecked(true);
@@ -73,12 +70,12 @@ public class LoginActivity extends AppCompatActivity {
                         id = etInputID.getText().toString();
                         password = etInputPW.getText().toString();
 
-                        editor.putString("ID", id);
-                        editor.putString("PW", password);
-                        editor.putBoolean("AutoLogin", true);
+                        editor.putString(LPSSharedPreferences.USER_ID, id);
+                        editor.putString(LPSSharedPreferences.USER_PW, password);
+                        editor.putBoolean(LPSSharedPreferences.AUTO_LOGIN, true);
                         editor.commit();
                     } else {
-                        editor.putBoolean("AutoLogin", false);
+                        editor.putBoolean(LPSSharedPreferences.AUTO_LOGIN, false);
                         editor.commit();
                     }
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
