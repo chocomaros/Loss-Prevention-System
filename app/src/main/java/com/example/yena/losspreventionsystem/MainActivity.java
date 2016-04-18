@@ -22,10 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_PUT_ITEM_TO_GROUP = 0;
     private ImageButton btEdit, btAlarm;
     private FloatingActionButton fab;
-    private int alarmControl;
+    private int alarmControl = ALARM_ALL_ON;
     private SharedPreferences pref;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
