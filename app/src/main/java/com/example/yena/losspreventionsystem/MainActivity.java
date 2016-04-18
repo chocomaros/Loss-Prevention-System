@@ -2,6 +2,7 @@ package com.example.yena.losspreventionsystem;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,15 +19,21 @@ import android.widget.ImageButton;
 public class MainActivity extends AppCompatActivity {
 
     public static final int ALARM_ALL_OFF = 0, ALARM_ALL_ON = 1;
+    private static final int REQUEST_PUT_ITEM_TO_GROUP = 0;
     private ImageButton btEdit, btAlarm;
     private FloatingActionButton fab;
-    private int alarmControl = 1;
+    private int alarmControl;
+    private SharedPreferences pref;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        pref = this.getSharedPreferences(LPSSharedPreferences.NAME, 0);
+        alarmControl = pref.getInt(LPSSharedPreferences.ALARM_CONTROL,ALARM_ALL_ON);
 
         btEdit = (ImageButton) findViewById(R.id.ib_edit);
         btAlarm = (ImageButton) findViewById(R.id.ib_alarm);
@@ -87,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
         btEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,PutItemToGroupActivity.class);
+                startActivityForResult(intent, REQUEST_PUT_ITEM_TO_GROUP);
             }
         });
 
@@ -94,15 +103,30 @@ public class MainActivity extends AppCompatActivity {
         btAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences.Editor editor = pref.edit();
+                alarmControl = pref.getInt(LPSSharedPreferences.ALARM_CONTROL,ALARM_ALL_ON);
                 if(alarmControl == ALARM_ALL_ON){
                     btAlarm.setImageResource(R.drawable.ic_alarm_off);
                     alarmControl = ALARM_ALL_OFF;
+                    editor.putInt(LPSSharedPreferences.ALARM_CONTROL,alarmControl);
                 } else{
                     btAlarm.setImageResource(R.drawable.ic_alarm_on);
                     alarmControl = ALARM_ALL_ON;
+                    editor.putInt(LPSSharedPreferences.ALARM_CONTROL,alarmControl);
                 }
+                editor.commit();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_PUT_ITEM_TO_GROUP){
+            if(resultCode == RESULT_OK){
+
+            }
+        }
     }
 
     @Override

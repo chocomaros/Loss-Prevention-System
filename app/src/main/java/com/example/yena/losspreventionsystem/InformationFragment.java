@@ -27,7 +27,7 @@ public class InformationFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        ArrayList<ItemInfo> arrayList = new ArrayList<ItemInfo>();
+        ArrayList<ItemInfo> arrayList;
 //        ItemInfo item1 = new ItemInfo("10203","fff",20,ItemInfo.ALARM_OFF);
 //        ItemInfo item2 = new ItemInfo("ad2034","asdf",30,ItemInfo.ALARM_SILENT);
 //        ItemInfo item3 = new ItemInfo("afds32","cvz",40,ItemInfo.ALARM_SOUND);
@@ -42,7 +42,7 @@ public class InformationFragment extends Fragment {
             Log.d("arrayList.get(0)", arrayList.get(i).name);
         }
 
-        adapter = new InformationAdapter(arrayList);
+        adapter = new InformationAdapter(arrayList,InformationAdapter.MAIN);
         super.onCreate(savedInstanceState);
     }
 

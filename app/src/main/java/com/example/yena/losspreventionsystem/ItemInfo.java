@@ -17,6 +17,7 @@ public class ItemInfo {
     String name;
     double distance;
     int alarmStatus;
+    boolean checked = false;
 
     public ItemInfo(){
 
@@ -27,6 +28,10 @@ public class ItemInfo {
         this.name = name;
         this.distance = distance;
         this.alarmStatus = alarmStatus;
+    }
+    public ItemInfo(String beaconID, String name, double distance, int alarmStatus,boolean checked){
+       this(beaconID,name,distance, alarmStatus);
+        this.checked = checked;
     }
 
     public ItemInfo(Cursor cursor){

@@ -23,7 +23,7 @@
                 android:id="@+id/tv_alarm_manage"
                 android:text="알람 관리"
                 android:textSize="20sp"
-                android:background="@color/mint" />
+                android:background="@color/brightMint" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                 android:text="계정 관리"
                 android:textSize="20sp"
                 android:id="@+id/tv_account_manage"
-                android:background="@color/mint" />
+                android:background="@color/brightMint" />
 
             <TextView
                 android:layout_width="match_parent"

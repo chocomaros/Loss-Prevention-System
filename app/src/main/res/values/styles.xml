@@ -16,6 +16,7 @@
 
     <style name="MyToolBarTheme" parent="@style/AppTheme.NoActionBar">
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:background">@color/mint</item>
     </style>
 
     <style name="AlarmDistanceDialogTheme" parent="Base.Theme.AppCompat.Light.Dialog.Alert">
