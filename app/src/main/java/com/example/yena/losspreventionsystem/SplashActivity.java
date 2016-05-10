@@ -14,6 +14,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+
+        //bluetooth 설정
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
