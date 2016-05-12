@@ -3,6 +3,7 @@
     package="com.example.yena.losspreventionsystem">
 
     <!-- Required to scan for and connect to Estimote Beacons via Bluetooth. -->
+
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.VIBRATE" />
