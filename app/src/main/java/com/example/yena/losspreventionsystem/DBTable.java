@@ -9,7 +9,8 @@ public class DBTable {
                 BEACON_ID = "BEACON_ID",
                 ITEM_NAME = "ITEM_NAME",
                 ITEM_DISTANCE = "ITEM_DISTANCE",
-                ITEM_ALARM_STATUS = "ITEM_ALARM_STATUS";
+                ITEM_ALARM_STATUS = "ITEM_ALARM_STATUS",
+                ITEM_LOSS_TIME = "ITEM_LOSS_TIME";
     }
     public static class GroupInfoTable{
         public static final String TABLE_NAME = "GroupInfo",
