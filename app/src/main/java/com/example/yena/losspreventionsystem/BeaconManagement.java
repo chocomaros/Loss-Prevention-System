@@ -12,13 +12,11 @@ public class BeaconManagement {
     public BeaconManagement(){
 
     }
-    //내 비콘들 저장하는 list
-
 
 
     //거리가 벗어났는지
-    public boolean isOverDistance(ItemInfo itmeInfo, int maxDistace){
-        if(itmeInfo.distance < maxDistace){
+    public boolean isOverDistance(ItemInfo itemInfo, int maxDistance){
+        if(itemInfo.distance < maxDistance){
             return true;
         }else{
             return false;
