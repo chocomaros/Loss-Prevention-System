@@ -6,7 +6,8 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.media.Ringtone;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -19,12 +20,18 @@ public class AlarmManagement {
 
     public static final int  DISABLE = 0, ALARM_OFF = 1, ALARM_SILENT = 2,
             ALARM_VIBRATION = 3, ALARM_SOUND = 4, ALARM_SOUND_VIBRATION = 5;
+    //소리
+    MediaPlayer mAudio = null;
+    AudioManager am = null;
+    int StreamType = 0;
+    //진동
+    Vibrator vide;
 
     public Context context;
-    Vibrator vide;
+    //푸시메시지
     private NotificationManager notificationManager;
-    Ringtone ringTone;
-    Uri uriAlarm, uriNotification, uriRingtone;
+
+
     private static final int NOTIFICATION_ID = 1;
 
     public AlarmManagement(Context context){
@@ -37,11 +44,11 @@ public class AlarmManagement {
         builder.setTitle("Loss Prevention System");
         builder.setMessage(item.name+"이(가) 사라졌습니다.");
         if(item.alarmStatus == ALARM_SOUND){
-            Ringtone();
+            MediaPlay();
         }else if(item.alarmStatus == ALARM_VIBRATION){
             Vibrator_pattern();
         }else if(item.alarmStatus == ALARM_SOUND_VIBRATION){
-            Ringtone();
+            MediaPlay();
             Vibrator_pattern();
         }else if(item.alarmStatus == ALARM_SILENT) {
         }
@@ -80,15 +87,28 @@ public class AlarmManagement {
     }
 
     //소리
-    public  void Ringtone(){
-        uriAlarm = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        uriNotification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        uriRingtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+    public  void MediaPlay(){
+        try{
+            mAudio = new MediaPlayer();
+            Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+            mAudio.setDataSource(alert.toString());
 
+            am = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+            am.setStreamVolume(StreamType,am.getStreamMaxVolume(StreamType), AudioManager.FLAG_PLAY_SOUND);
+            //String path = "/system/Ringtone/sound.ogg";
+            //mAudio.setDataSource(path);
 
+            mAudio.setAudioStreamType(AudioManager.STREAM_RING);
+            mAudio.setAudioStreamType(StreamType);
+            mAudio.setLooping(true);
+            mAudio.prepare();
+
+        }catch(Exception e) {
+        }
+
+        mAudio.start();
 
     }
-
 
 
     //무한반복일때 이것으로 종료
@@ -97,7 +117,9 @@ public class AlarmManagement {
     }
 
     public void Cancle_Ringtone(){
-        vide.cancel();
+        mAudio.stop();
     }
+
+
 }
 
