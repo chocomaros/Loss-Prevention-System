@@ -1,5 +1,8 @@
 package com.example.yena.losspreventionsystem;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +16,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class PutItemToGroupActivity extends AppCompatActivity {
+
+    public static final String ITEMS_IN_GROUP = "ItemsInGroup";
 
     private ArrayList<ItemInfo> itemList;
     private Button btCancel, btSave;
@@ -39,7 +44,7 @@ public class PutItemToGroupActivity extends AppCompatActivity {
         btCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                setResult(RESULT_CANCELED);
             }
         });
 
@@ -52,10 +57,31 @@ public class PutItemToGroupActivity extends AppCompatActivity {
                         itemsInGroup.add(itemList.get(i));
                     }
                 }
+                Log.d("PutItemToGroupActivity ", "checked item # " + itemsInGroup.size());
 
-
-                Log.d("PutItemToGroupActivity ", "checked item # "+itemsInGroup.size());
+                if(itemsInGroup.size() == 0){
+                    printAlertDialog("체크 확인","체크된 물건이 없습니다.");
+                } else{
+                    Intent intent = new Intent();
+                    intent.putExtra(ITEMS_IN_GROUP,itemsInGroup);
+                    setResult(RESULT_OK,intent);
+                }
             }
         });
+    }
+
+    void printAlertDialog(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

@@ -50,6 +50,7 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
                 activityState = PUT_GROUP;
                 checkBoxVisibility = true;
                 distanceVisibility = false;
+                break;
         }
         this.itemList = itemList;
     }
