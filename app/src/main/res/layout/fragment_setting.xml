@@ -1,0 +1,88 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.yena.losspreventionsystem.SettingFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:id="@+id/tv_alarm_manage"
+                android:text="알람 관리"
+                android:textSize="20sp"
+                android:background="@color/brightMint" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_below="@+id/tv_alarm_manage"
+                android:id="@+id/tv_distance_setting"
+                android:text="알람 거리 설정"
+                android:textSize="20sp"
+                android:background="@drawable/border"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_below="@+id/tv_alarm_manage"
+                android:layout_alignParentRight="true"
+                android:id="@+id/tv_distance_setting_value"
+                android:text="0m"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:background="@drawable/border"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="계정 관리"
+                android:textSize="20sp"
+                android:id="@+id/tv_account_manage"
+                android:background="@color/brightMint" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_below="@id/tv_account_manage"
+                android:text="로그아웃"
+                android:textSize="20sp"
+                android:id="@+id/tv_logout"
+                android:background="@drawable/border"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_below="@id/tv_logout"
+                android:text="회원 탈퇴"
+                android:textSize="20sp"
+                android:id="@+id/tv_unregister"
+                android:background="@drawable/border"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.yena.losspreventionsystem.SignUpActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:theme="@style/MyToolBarTheme"
+            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_signup_name"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="132dp"
+            android:hint="이름"
+            android:textSize="20sp"
+            android:backgroundTint="@color/mint"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_alignLeft="@+id/et_signup_name"
+            android:layout_alignRight="@+id/et_signup_name"
+            android:id="@+id/et_signup_id"
+            android:layout_below="@+id/et_signup_name"
+            android:layout_centerHorizontal="true"
+            android:hint="ID"
+            android:textSize="20sp"
+            android:backgroundTint="@color/mint"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_alignLeft="@+id/et_signup_name"
+            android:layout_alignRight="@+id/et_signup_name"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/et_signup_password"
+            android:layout_below="@+id/et_signup_id"
+            android:layout_centerHorizontal="true"
+            android:hint="PASSWORD"
+            android:textSize="20sp"
+            android:backgroundTint="@color/mint"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_alignLeft="@+id/et_signup_name"
+            android:layout_alignRight="@+id/et_signup_name"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/et_signup_password2"
+            android:layout_below="@+id/et_signup_password"
+            android:layout_centerHorizontal="true"
+            android:hint="PASSWORD 재확인"
+            android:textSize="20sp"
+            android:backgroundTint="@color/mint"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/et_signup_name"
+            android:layout_alignRight="@+id/et_signup_name"
+            android:text="가입하기"
+            android:id="@+id/bt_complete_sign_up"
+            android:layout_below="@+id/et_signup_password2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:textSize="20sp"
+            android:background="@color/gray"
+            android:textColor="@color/white"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="중복 확인"
+            android:id="@+id/bt_check_id"
+            android:layout_below="@+id/et_signup_name"
+            android:layout_alignRight="@+id/et_signup_id"
+            android:layout_alignEnd="@+id/et_signup_id" />
+    </RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
