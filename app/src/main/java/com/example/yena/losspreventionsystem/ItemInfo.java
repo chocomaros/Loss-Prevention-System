@@ -1,17 +1,10 @@
 package com.example.yena.losspreventionsystem;
 
+
 import android.database.Cursor;
 
-<<<<<<< HEAD
-/**
- * Created by yena on 2016-04-10.
- */
-public class ItemInfo {
-///// DISABLE : 아예 찾지도 않는거, ALARM_OFF : 알람기능만 없는거(팝업 메시지는 있다)
-=======
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -20,7 +13,7 @@ import java.util.Locale;
  */
 public class ItemInfo implements Serializable {
 /// DISABLE : 아예 찾지도 않는거, ALARM_OFF : 알람기능만 없는거(팝업 메시지는 있다)
->>>>>>> origin/master
+
     public static final int  DISABLE = 0, ALARM_OFF = 1, ALARM_SILENT = 2,
             ALARM_VIBRATION = 3, ALARM_SOUND = 4, ALARM_SOUND_VIBRATION = 5;
 
