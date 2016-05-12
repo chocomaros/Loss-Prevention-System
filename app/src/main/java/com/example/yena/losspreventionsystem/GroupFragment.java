@@ -34,7 +34,7 @@ public class GroupFragment extends Fragment {
         groupList.add(group1);
         groupList.add(group2);
         groupList.add(group3);
-        adapter = new GroupAdapter(groupList);
+        adapter = new GroupAdapter(groupList,GroupAdapter.MAIN);
     }
 
     @Override

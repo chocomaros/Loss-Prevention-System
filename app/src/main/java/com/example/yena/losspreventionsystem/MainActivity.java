@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final int ALARM_ALL_OFF = 0, ALARM_ALL_ON = 1;
@@ -126,7 +128,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_PUT_ITEM_TO_GROUP){
             if(resultCode == RESULT_OK){
-
+//                ArrayList<ItemInfo> itemsInGroup = new ArrayList<ItemInfo>();
+//                itemsInGroup = (ArrayList<ItemInfo>)getIntent().getSerializableExtra(PutItemToGroupActivity.ITEMS_IN_GROUP);
             }
         }
     }
