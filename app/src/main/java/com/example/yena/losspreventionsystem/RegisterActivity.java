@@ -19,9 +19,11 @@ public class RegisterActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ArrayList<ItemInfo> itemList = new ArrayList<ItemInfo>();
-        ItemInfo itemInfo=new ItemInfo("asaf","진동",4,3);
-//        LPSDAO.insertItemInfo(this, itemInfo);
+        ArrayList<ItemInfo> itemList;
+//        ItemInfo itemInfo1=new ItemInfo("gg","진동",3,3);
+//        ItemInfo itemInfo2=new ItemInfo("asdf","진동+소리",4,5);
+//        LPSDAO.insertItemInfo(this, itemInfo1);
+//        LPSDAO.insertItemInfo(this, itemInfo2);
         itemList = LPSDAO.getItemInfo(this);
         AlarmManagement alarmManagement;
         alarmManagement = new AlarmManagement(this);

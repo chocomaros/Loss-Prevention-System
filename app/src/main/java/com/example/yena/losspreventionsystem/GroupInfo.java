@@ -11,6 +11,7 @@ public class GroupInfo {
 
     int id;
     String name;
+    boolean radiobuttonChecked = false;
 
     public GroupInfo(){
 
@@ -18,6 +19,12 @@ public class GroupInfo {
     public GroupInfo(int id, String name){
         this.id = id;
         this.name = name;
+    }
+
+    public GroupInfo(int id, String name, boolean radiobuttonChecked){
+        this.id = id;
+        this.name = name;
+        this.radiobuttonChecked = radiobuttonChecked;
     }
 
     public GroupInfo(Cursor cursor){

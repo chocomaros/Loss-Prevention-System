@@ -1,5 +1,6 @@
 package com.example.yena.losspreventionsystem;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,15 +26,8 @@ public class GroupFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ArrayList<Integer> arrayList = new ArrayList<>();
-        arrayList.add(1);
-        arrayList.add(2);
-        GroupInfo group1 = new GroupInfo(1,"첫번째");
-        GroupInfo group2 = new GroupInfo(2,"두번째");
-        GroupInfo group3 = new GroupInfo(3,"세번째");
-        groupList.add(group1);
-        groupList.add(group2);
-        groupList.add(group3);
+
+        groupList = LPSDAO.getGroupInfo(getContext());
         adapter = new GroupAdapter(groupList,GroupAdapter.MAIN);
     }
 
@@ -48,6 +42,13 @@ public class GroupFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.groupList = LPSDAO.getGroupInfo(getContext());
+        adapter.notifyDataSetChanged();
     }
 
     @Override

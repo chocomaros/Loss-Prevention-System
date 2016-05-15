@@ -63,21 +63,12 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
         holder. tvDistance.setText("거리 : "+itemInfo.distance);
         ArrayList<GroupInfo> groupList;
         groupList = LPSDAO.getGroupListOfItem(context,itemList.get(position));
-        String groupName = null;
+        String groupName = new String();
         for(int i=0;i<groupList.size();i++) {
-            groupName.concat(" " +groupList.get(i).name);
-            holder.tvGroup.setText("그룹 :" + groupName);
+            groupName = groupName.concat(" " + groupList.get(i).name);
         }
-//        cbPutGroup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if(itemInfo.checked){
-//                    itemInfo.checked = false;
-//                } else{
-//                    itemInfo.checked = true;
-//                }
-//            }
-//        });'
+        holder.tvGroup.setText("그룹 :" + groupName);
+
         final CheckBox checkBox = holder.cbPutGroup;
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override

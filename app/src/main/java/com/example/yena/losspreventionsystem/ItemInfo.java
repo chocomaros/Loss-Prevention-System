@@ -3,7 +3,7 @@ package com.example.yena.losspreventionsystem;
 
 import android.database.Cursor;
 
-import com.estimote.sdk.Beacon;
+//import com.estimote.sdk.Beacon;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -24,29 +24,43 @@ public class ItemInfo implements Serializable {
 
     public ItemInfo(){}
 
-    public double getDistance(Beacon beacon) {
-        return Math.pow(10d, ((double)beacon.getMeasuredPower() - beacon.getRssi()) / (10 * 2));
-    }
+//    public double getDistance(Beacon beacon) {
+//        return Math.pow(10d, ((double)beacon.getMeasuredPower() - beacon.getRssi()) / (10 * 2));
+//    }
+//
+//    //TODO 더 해줘야함!!!
+//    public ItemInfo(Beacon beacon, String name, double distance, int alarmStatus){
+//        this.beaconID = beacon.getProximityUUID()+":"+ beacon.getMajor()+":"+beacon.getMinor();
+//        this.name = name;
+//        this.distance = getDistance(beacon);
+//        this.alarmStatus = alarmStatus;
+//        this.lossTime = null;
+//    }
+//    public ItemInfo(Beacon beacon, String name, double distance, int alarmStatus, Calendar lossTime){
+//        this.beaconID = beacon.getProximityUUID()+":"+ beacon.getMajor()+":"+beacon.getMinor();
+//        this.name = name;
+//        this.distance = getDistance(beacon);
+//        this.alarmStatus = alarmStatus;
+//        this.lossTime = lossTime;
+//    }
+//
+//    public ItemInfo(Beacon beacon, String name, double distance, int alarmStatus,boolean checked){
+//       this(beacon,name,distance, alarmStatus);
+//        this.checked = checked;
+//    }
 
-    //TODO 더 해줘야함!!!
-    public ItemInfo(Beacon beacon, String name, double distance, int alarmStatus){
-        this.beaconID = beacon.getProximityUUID()+":"+ beacon.getMajor()+":"+beacon.getMinor();
-        this.name = name;
-        this.distance = getDistance(beacon);
-        this.alarmStatus = alarmStatus;
-        this.lossTime = null;
-    }
-    public ItemInfo(Beacon beacon, String name, double distance, int alarmStatus, Calendar lossTime){
-        this.beaconID = beacon.getProximityUUID()+":"+ beacon.getMajor()+":"+beacon.getMinor();
-        this.name = name;
-        this.distance = getDistance(beacon);
-        this.alarmStatus = alarmStatus;
-        this.lossTime = lossTime;
-    }
-
-    public ItemInfo(Beacon beacon, String name, double distance, int alarmStatus,boolean checked){
-       this(beacon,name,distance, alarmStatus);
+    public ItemInfo(String beaconID, String name, double distance, int alarmStatus,boolean checked){
+        this(beaconID,name,distance, alarmStatus);
         this.checked = checked;
+    }
+
+    public ItemInfo(String beaconID, String name, double distance, int alarmStatus){
+        this.beaconID = beaconID;
+        this.name = name;
+        this.distance = distance;
+        this.alarmStatus = alarmStatus;
+        this.lossTime = Calendar.getInstance();
+        this.lossTime.setTimeInMillis(0);
     }
 
     public ItemInfo(Cursor cursor){

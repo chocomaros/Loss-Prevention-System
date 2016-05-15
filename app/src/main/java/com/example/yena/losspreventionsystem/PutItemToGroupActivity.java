@@ -1,5 +1,6 @@
 package com.example.yena.losspreventionsystem;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -21,12 +22,14 @@ public class PutItemToGroupActivity extends AppCompatActivity {
 
     private ArrayList<ItemInfo> itemList;
     private Button btCancel, btSave;
+    private GroupSaveDialog groupSaveDialog;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_put_item_to_group);
-
+        context = getApplicationContext();
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_information_put_group);
 
@@ -41,30 +44,57 @@ public class PutItemToGroupActivity extends AppCompatActivity {
         btCancel = (Button)findViewById(R.id.bt_put_to_group_cancel);
         btSave = (Button)findViewById(R.id.bt_put_to_group_save);
 
+        groupSaveDialog = new GroupSaveDialog(this);
+
         btCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setResult(RESULT_CANCELED);
+                finish();
             }
         });
 
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<ItemInfo> itemsInGroup = new ArrayList<ItemInfo>();
-                for(int i=0;i<itemList.size();i++){
-                    if(itemList.get(i).checked){
+                final ArrayList<ItemInfo> itemsInGroup = new ArrayList<>();
+                for (int i = 0; i < itemList.size(); i++) {
+                    if (itemList.get(i).checked) {
                         itemsInGroup.add(itemList.get(i));
                     }
                 }
                 Log.d("PutItemToGroupActivity ", "checked item # " + itemsInGroup.size());
 
-                if(itemsInGroup.size() == 0){
-                    printAlertDialog("체크 확인","체크된 물건이 없습니다.");
-                } else{
-                    Intent intent = new Intent();
-                    intent.putExtra(ITEMS_IN_GROUP,itemsInGroup);
-                    setResult(RESULT_OK,intent);
+                if (itemsInGroup.size() == 0) {
+                    printAlertDialog("체크 확인", "체크된 물건이 없습니다.");
+                } else {
+                    groupSaveDialog.show();
+
+                    // 다이얼로그 없어졌을때
+                    groupSaveDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            if(groupSaveDialog.getSaveButtonClicked()){
+                                for(int i=0;i<itemsInGroup.size();i++){
+                                    Log.d("itemsInGroup",itemsInGroup.get(i).name + " , alarmStatus : " + itemsInGroup.get(i).alarmStatus);
+                                    Log.d("getSavedGroup",groupSaveDialog.getSavedGroup().name + "group ID : " + groupSaveDialog.getSavedGroup().id);
+                                    LPSDAO.insertItemGroup(context,itemsInGroup.get(i),groupSaveDialog.getSavedGroup());
+                                }
+                                finish();
+                            }
+                        }
+                    });
+
+                    //다이얼로그 취소 누를때
+                    groupSaveDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                        }
+                    });
+
+                    Intent intent = new Intent(PutItemToGroupActivity.this, GroupSaveDialog.class);
+                    intent.putExtra(ITEMS_IN_GROUP, itemsInGroup);
+                    //setResult(RESULT_OK,intent);
                 }
             }
         });
@@ -84,4 +114,5 @@ public class PutItemToGroupActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 }

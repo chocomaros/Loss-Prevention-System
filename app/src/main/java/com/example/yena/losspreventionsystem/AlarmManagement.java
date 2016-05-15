@@ -44,20 +44,39 @@ public class AlarmManagement {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Loss Prevention System");
         builder.setMessage(item.name+"이(가) 사라졌습니다.");
-        if(item.alarmStatus == ALARM_SOUND){
-            MediaPlay();
-        }else if(item.alarmStatus == ALARM_VIBRATION){
-            Vibrator_pattern();
-        }else if(item.alarmStatus == ALARM_SOUND_VIBRATION){
-            MediaPlay();
-            Vibrator_pattern();
-        }else if(item.alarmStatus == ALARM_SILENT) {
+        builder.setCancelable(false);
+        final int alarmStatus = item.alarmStatus;
+        switch (alarmStatus){
+            case ALARM_SOUND :
+                MediaPlay();
+                break;
+            case ALARM_VIBRATION :
+                Vibrator_pattern();
+                break;
+            case ALARM_SOUND_VIBRATION :
+                MediaPlay();
+                Vibrator_pattern();
+                break;
+            case ALARM_SILENT :
+                break;
         }
         builder.setNeutralButton("close", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Cancle_Vib();
-                Cancle_Ringtone();
+                switch(alarmStatus){
+                    case ALARM_SOUND :
+                        Cancel_Ringtone();
+                        break;
+                    case ALARM_VIBRATION :
+                        Cancel_Vib();
+                        break;
+                    case ALARM_SOUND_VIBRATION :
+                        Cancel_Vib();
+                        Cancel_Ringtone();
+                        break;
+                    case ALARM_SILENT :
+                        break;
+                }
             }
         });
         builder.show();
@@ -113,11 +132,11 @@ public class AlarmManagement {
 
 
     //무한반복일때 이것으로 종료
-    public void Cancle_Vib(){
+    public void Cancel_Vib(){
         vide.cancel();
     }
 
-    public void Cancle_Ringtone(){
+    public void Cancel_Ringtone(){
         mAudio.stop();
     }
 
