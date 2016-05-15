@@ -1,6 +1,7 @@
 package com.example.yena.losspreventionsystem;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +48,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final GroupAdapter.ViewHolder holder, final int position) {
-        GroupInfo groupInfo = groupList.get(position);
+        final GroupInfo groupInfo = groupList.get(position);
         ArrayList<ItemInfo> itemsInGroup;
         itemsInGroup = LPSDAO.getItemListOfGroup(context,groupInfo);
 
@@ -70,8 +71,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(activityState == MAIN){
-                    //TODO MAIN에서 group 클릭했을때
+                    Intent intent = new Intent(v.getContext(),GroupInfoDetailActivity.class);
+                    intent.putExtra("GroupInfo", groupInfo);
+                    v.getContext().startActivity(intent);
+
                 } else if(activityState == GROUP_LIST_DIALOG){
                     if(holder.rbGroup.isChecked()){
                         holder.rbGroup.setChecked(false);

@@ -2,6 +2,7 @@ package com.example.yena.losspreventionsystem;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -82,7 +83,9 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
                         itemList.get(position).checked=true;
                     }
                 } else if (activityState == MAIN) {
-                    //TODO Main에서 item click했을때
+                    Intent intent = new Intent(v.getContext(),ItemInfoDetailActivity.class);
+                    intent.putExtra("ItemInfo",itemInfo);
+                    v.getContext().startActivity(intent);
                 }
             }
         });

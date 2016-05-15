@@ -2,12 +2,13 @@ package com.example.yena.losspreventionsystem;
 
 import android.database.Cursor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by yena on 2016-04-11.
  */
-public class GroupInfo {
+public class GroupInfo implements Serializable {
 
     int id;
     String name;

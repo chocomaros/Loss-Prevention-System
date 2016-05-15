@@ -83,10 +83,13 @@ public class SettingFragment extends Fragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogLayout = inflater.inflate(R.layout.dialog_alarm_distance_setting, null);
 
-        final RadioButton radioButton1 = (RadioButton)dialogLayout.findViewById(R.id.rb_distance1);
-        final RadioButton radioButton2 = (RadioButton)dialogLayout.findViewById(R.id.rb_distance2);
-        final RadioButton radioButton3 = (RadioButton)dialogLayout.findViewById(R.id.rb_distance3);
-        final RadioButton radioButton4 = (RadioButton)dialogLayout.findViewById(R.id.rb_distance4);
+
+
+
+
+
+
+
         final RadioGroup radioGroup = (RadioGroup)dialogLayout.findViewById(R.id.rg_distance);
 
         int radioId;

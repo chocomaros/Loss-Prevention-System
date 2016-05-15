@@ -74,6 +74,7 @@ public class PutItemToGroupActivity extends AppCompatActivity {
                     groupSaveDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
+                            //TODO 그룹에 이미 물건 있을때 어케 처리할것인가?
                             if(groupSaveDialog.getSaveButtonClicked()){
                                 for(int i=0;i<itemsInGroup.size();i++){
                                     Log.d("itemsInGroup",itemsInGroup.get(i).name + " , alarmStatus : " + itemsInGroup.get(i).alarmStatus);

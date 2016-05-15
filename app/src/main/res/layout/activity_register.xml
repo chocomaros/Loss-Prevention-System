@@ -10,7 +10,7 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -18,16 +18,158 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:theme="@style/MyToolBarTheme"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_register_name"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:hint="이름"
+            android:textSize="20sp"
+            android:backgroundTint="@color/mint"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_alignLeft="@+id/et_register_name"
+            android:layout_alignRight="@+id/et_register_name"
+            android:id="@+id/tv_register_beacon_id"
+            android:layout_below="@+id/et_register_name"
+            android:layout_centerHorizontal="true"
+            android:hint="Beacon ID"
+            android:textSize="20sp"
+            android:background="?attr/editTextBackground"
+            android:backgroundTint="@color/mint"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Beacon 확인"
+            android:id="@+id/bt_check_id"
+            android:layout_below="@+id/et_register_name"
+            android:layout_alignRight="@+id/tv_register_beacon_id"
+            android:layout_alignEnd="@+id/tv_register_beacon_id" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_alignLeft="@+id/et_register_name"
+            android:layout_alignRight="@+id/et_register_name"
+            android:id="@+id/tv_register_select_alarm"
+            android:layout_below="@+id/tv_register_beacon_id"
+            android:layout_centerHorizontal="true"
+            android:text="알람 선택"
+            android:textSize="20sp"
+            android:backgroundTint="@color/mint"/>
+
+        <RadioGroup
+            android:id="@+id/rg_select_alarm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/rb_alarm_vibration"
+            android:layout_alignLeft="@+id/et_register_name"
+            android:layout_alignRight="@+id/et_register_name"
+            android:layout_below="@+id/tv_register_select_alarm"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/rb_alarm_disable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="?attr/editTextBackground"
+                android:padding="10dp"
+                android:text="찾기 차단"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/rb_alarm_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="?attr/editTextBackground"
+                android:padding="10dp"
+                android:text="알람만 끄기"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/rb_alarm_silent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="?attr/editTextBackground"
+                android:padding="10dp"
+                android:text="무음"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/rb_alarm_vibration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="?attr/editTextBackground"
+                android:padding="10dp"
+                android:text="진동"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/rb_alarm_sound"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="?attr/editTextBackground"
+                android:padding="10dp"
+                android:text="소리"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/rb_alarm_sound_vibration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="?attr/editTextBackground"
+                android:padding="10dp"
+                android:text="진동+소리"
+                android:textSize="15sp" />
+        </RadioGroup>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/et_register_name"
+            android:layout_alignRight="@+id/et_register_name"
+            android:text="등록하기"
+            android:id="@+id/bt_register"
+            android:layout_below="@+id/rg_select_alarm"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:textSize="20sp"
+            android:background="@color/gray"
+            android:textColor="@color/white"/>
+
+
+    </RelativeLayout>
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--android:src="@android:drawable/ic_dialog_email" />-->
 
 </android.support.design.widget.CoordinatorLayout>
