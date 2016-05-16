@@ -43,8 +43,14 @@
         <activity
             android:name=".PutItemToGroupActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ItemInfoDetailActivity" />
-        <activity android:name=".GroupInfoDetailActivity"></activity>
+        <activity
+            android:name=".ItemInfoDetailActivity"
+            android:label="@string/title_activity_item_info_detail2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".GroupInfoDetailActivity"
+            android:label="@string/title_activity_group_info_detail2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

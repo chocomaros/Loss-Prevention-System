@@ -80,8 +80,10 @@ public class RegisterActivity extends AppCompatActivity {
 //        ArrayList<ItemInfo> itemList;
 //        ItemInfo itemInfo1=new ItemInfo("gg","진동",3,3);
 //        ItemInfo itemInfo2=new ItemInfo("asdf","진동+소리",4,5);
+//        ItemInfo itemInfo3=new ItemInfo("dd","무음",1,2);
 //        LPSDAO.insertItemInfo(this, itemInfo1);
 //        LPSDAO.insertItemInfo(this, itemInfo2);
+//        LPSDAO.insertItemInfo(this,itemInfo3);
 //        itemList = LPSDAO.getItemInfo(this);
 //        AlarmManagement alarmManagement;
 //        alarmManagement = new AlarmManagement(this);

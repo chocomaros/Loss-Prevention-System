@@ -123,4 +123,26 @@ public class LPSDAO {
         db.execSQL("delete from " + DBTable.ItemGroupTable.TABLE_NAME +
                 " where " + DBTable.ItemInfoTable.BEACON_ID + " = '" + itemInfo.beaconID + "' and " + DBTable.GroupInfoTable.GROUP_ID + " = " + groupInfo.id + ";");
     }
+
+    public static void deleteItemGroup(Context context, ItemInfo itemInfo){
+        LPSDBHelper dbHelper = new LPSDBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.execSQL("delete from " + DBTable.ItemGroupTable.TABLE_NAME +
+                " where " + DBTable.ItemInfoTable.BEACON_ID + " = '" + itemInfo.beaconID + "';");
+    }
+
+    public static void deleteItemGroup(Context context, GroupInfo groupInfo){
+        LPSDBHelper dbHelper = new LPSDBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.execSQL("delete from " + DBTable.ItemGroupTable.TABLE_NAME +
+                " where " + DBTable.GroupInfoTable.GROUP_ID + " = " + groupInfo.id + ";");
+    }
+
+    public static void updateItemInfoAlarmStatus(Context context, ItemInfo itemInfo){
+        LPSDBHelper dbHelper = new LPSDBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.execSQL("update " + DBTable.ItemInfoTable.TABLE_NAME +
+                " set " + DBTable.ItemInfoTable.ITEM_ALARM_STATUS + " = " + itemInfo.alarmStatus +
+                " where " + DBTable.ItemInfoTable.BEACON_ID + " = '" + itemInfo.beaconID + "';");
+    }
 }

@@ -1,20 +1,15 @@
 package com.example.yena.losspreventionsystem;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -66,9 +61,13 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
         groupList = LPSDAO.getGroupListOfItem(context,itemList.get(position));
         String groupName = new String();
         for(int i=0;i<groupList.size();i++) {
-            groupName = groupName.concat(" " + groupList.get(i).name);
+            if(i != groupList.size() - 1){
+                groupName = groupName.concat(groupList.get(i).name + ", ");
+            } else{
+                groupName = groupName.concat(groupList.get(i).name);
+            }
         }
-        holder.tvGroup.setText("그룹 :" + groupName);
+        holder.tvGroup.setText("그룹 : " + groupName);
 
         final CheckBox checkBox = holder.cbPutGroup;
         holder.view.setOnClickListener(new View.OnClickListener() {

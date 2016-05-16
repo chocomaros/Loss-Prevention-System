@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int ALARM_ALL_OFF = 0, ALARM_ALL_ON = 1;
     private static final int REQUEST_PUT_ITEM_TO_GROUP = 0;
-    private ImageButton btEdit, btAlarm;
+    private ImageButton btPutGroup, btAlarm;
     private FloatingActionButton fab;
     private int alarmControl = ALARM_ALL_ON;
     private SharedPreferences pref;
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         pref = this.getSharedPreferences(LPSSharedPreferences.NAME, 0);
         alarmControl = pref.getInt(LPSSharedPreferences.ALARM_CONTROL,ALARM_ALL_ON);
 
-        btEdit = (ImageButton) findViewById(R.id.ib_edit);
+        btPutGroup = (ImageButton) findViewById(R.id.ib_put_in_group);
         btAlarm = (ImageButton) findViewById(R.id.ib_alarm);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         if(alarmControl == ALARM_ALL_OFF) {
@@ -68,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
                 if (tab.getPosition() != 0) {
-                    btEdit.setVisibility(View.INVISIBLE);
+                    btPutGroup.setVisibility(View.INVISIBLE);
                     fab.setVisibility(View.INVISIBLE);
                 } else{
-                    btEdit.setVisibility(View.VISIBLE);
+                    btPutGroup.setVisibility(View.VISIBLE);
                     fab.setVisibility(View.VISIBLE);
                 }
             }
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btEdit.setOnClickListener(new View.OnClickListener() {
+        btPutGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,PutItemToGroupActivity.class);
