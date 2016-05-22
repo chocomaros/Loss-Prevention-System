@@ -44,7 +44,7 @@
                         android:layout_toLeftOf="@+id/ib_alarm"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
-                        android:background="@drawable/ic_edit"/>
+                        android:background="@drawable/ic_put"/>
                     <ImageButton
                         android:id="@+id/ib_alarm"
                         android:layout_width="wrap_content"
@@ -83,6 +83,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+        android:src="@drawable/ic_add" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -145,4 +145,20 @@ public class LPSDAO {
                 " set " + DBTable.ItemInfoTable.ITEM_ALARM_STATUS + " = " + itemInfo.alarmStatus +
                 " where " + DBTable.ItemInfoTable.BEACON_ID + " = '" + itemInfo.beaconID + "';");
     }
+
+    public static void updateGroupInfoName(Context context, GroupInfo groupInfo){
+        LPSDBHelper dbHelper = new LPSDBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.execSQL("update " + DBTable.GroupInfoTable.TABLE_NAME +
+                " set " + DBTable.GroupInfoTable.GROUP_NAME + " = '" + groupInfo.name + "'"+
+                " where " + DBTable.GroupInfoTable.GROUP_ID + " = " + groupInfo.id + ";");
+    }
+
+    public static void updateItemInfoName(Context context, ItemInfo itemInfo){
+        LPSDBHelper dbHelper = new LPSDBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.execSQL("update " + DBTable.ItemInfoTable.TABLE_NAME +
+                " set " + DBTable.ItemInfoTable.ITEM_NAME + " = '" + itemInfo.name + "'"+
+                " where " + DBTable.ItemInfoTable.BEACON_ID + " = '" + itemInfo.beaconID + "';");
+    }
 }

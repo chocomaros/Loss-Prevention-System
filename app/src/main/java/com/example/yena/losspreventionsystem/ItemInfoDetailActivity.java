@@ -2,12 +2,14 @@ package com.example.yena.losspreventionsystem;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -21,7 +23,7 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
     private ItemInfo itemInfo;
     private TextView tvName, tvBeaconID, tvLossTime;
     private RadioGroup rgAlarm;
-    private ImageButton ibEdit, ibDelete;
+    private ImageButton ibDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,6 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
         tvBeaconID = (TextView)findViewById(R.id.tv_item_detail_beacon_id);
         tvLossTime = (TextView)findViewById(R.id.tv_item_detail_loss_time);
         rgAlarm = (RadioGroup)findViewById(R.id.rg_item_detail_alarm);
-        ibEdit = (ImageButton)findViewById(R.id.ib_edit_item);
         ibDelete = (ImageButton)findViewById(R.id.ib_delete_item);
 
         tvName.setText(itemInfo.name);
@@ -51,17 +52,17 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
             tvLossTime.setText(sdf.format(new Date(itemInfo.lossTime.getTimeInMillis())));
         }
 
-        ibEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
         ibDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 printDeleteAlertDialog();
+            }
+        });
+
+        tvName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                printNameChangeAlertDialog();
             }
         });
 
@@ -97,7 +98,7 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("삭제 확인")
-                .setMessage("정말로 이 물건을 삭제하시겠습니까?")
+                .setMessage("정말로 이 물건("+itemInfo.name+")을 삭제하시겠습니까?")
                 .setCancelable(true)
                 .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                     @Override
@@ -111,6 +112,36 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
                         LPSDAO.deleteItemInfo(getApplicationContext(), itemInfo);
                         dialog.cancel();
                         finish();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    void printNameChangeAlertDialog(){
+        final EditText input = new EditText(getApplicationContext());
+        input.setText(itemInfo.name);
+        input.setSingleLine();
+        input.setTextColor(Color.WHITE);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(input);
+
+        builder.setTitle("이름 수정")
+                .setMessage("물건 이름을 수정해주세요.")
+                .setCancelable(true)
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton("저장", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        itemInfo.name = input.getText().toString();
+                        LPSDAO.updateItemInfoName(getApplicationContext(), itemInfo);
+                        tvName.setText(itemInfo.name);
+                        dialog.cancel();
                     }
                 });
         AlertDialog dialog = builder.create();
