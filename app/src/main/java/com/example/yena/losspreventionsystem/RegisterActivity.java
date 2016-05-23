@@ -1,8 +1,9 @@
 package com.example.yena.losspreventionsystem;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
+import android.os.Message;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,9 +12,18 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
 
-public class RegisterActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+public class RegisterActivity extends AppCompatActivity implements BeaconConsumer{
 
     private EditText etName;
     private TextView tvBeaconID;
@@ -22,6 +32,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     private int alarmStatusSelect;
 
+    List<Beacon> beaconList = new ArrayList<>();
+    BeaconManager beaconManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +49,16 @@ public class RegisterActivity extends AppCompatActivity {
 
         alarmStatusSelect = AlarmManagement.ALARM_VIBRATION;
 
+
+        beaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(this);
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+        beaconManager.bind(this);
+
+
         btCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                handler.sendEmptyMessage(0);
             }
         });
 
@@ -76,19 +94,43 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
-
-//        ArrayList<ItemInfo> itemList;
-//        ItemInfo itemInfo1=new ItemInfo("gg","진동",3,3);
-//        ItemInfo itemInfo2=new ItemInfo("asdf","진동+소리",4,5);
-//        ItemInfo itemInfo3=new ItemInfo("dd","무음",1,2);
-//        LPSDAO.insertItemInfo(this, itemInfo1);
-//        LPSDAO.insertItemInfo(this, itemInfo2);
-//        LPSDAO.insertItemInfo(this,itemInfo3);
-//        itemList = LPSDAO.getItemInfo(this);
-//        AlarmManagement alarmManagement;
-//        alarmManagement = new AlarmManagement(this);
-//        alarmManagement.PopupMsg(itemList.get(1));
-//        alarmManagement.generateNotification(itemList.get(1));
     }
+    Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            tvBeaconID.setText("");
 
+            // 비콘의 아이디와 거리를 측정하여 textView에 넣는다.
+            for(Beacon beacon : beaconList){
+                tvBeaconID.append("\n"+beacon.getId1());
+            }
+
+            // 자기 자신을 1초마다 호출
+            handler.sendEmptyMessageDelayed(0, 100);
+        }
+    };
+
+
+    @Override
+    public void onBeaconServiceConnect() {
+        beaconManager.setRangeNotifier(new RangeNotifier() {
+            @Override
+            // 비콘이 감지되면 해당 함수가 호출된다. Collection<Beacon> beacons에는 감지된 비콘의 리스트가,
+            // region에는 비콘들에 대응하는 Region 객체가 들어온다.
+            public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+                if (beacons.size() > 0) {
+                    beaconList.clear();
+                    for (Beacon beacon : beacons) {
+                        beaconList.add(beacon);
+                    }
+                }
+
+            }
+        });
+
+        try {
+            beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
+
+        } catch (RemoteException e) {
+        }
+    }
 }
