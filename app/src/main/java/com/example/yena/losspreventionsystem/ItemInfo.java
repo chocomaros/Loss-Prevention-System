@@ -2,9 +2,7 @@ package com.example.yena.losspreventionsystem;
 
 
 import android.database.Cursor;
-
-//import com.estimote.sdk.Beacon;
-
+import android.util.Log;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -70,10 +68,12 @@ public class ItemInfo implements Serializable {
         alarmStatus = cursor.getInt(3);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA);
         try {
+            Log.d("ItemInfo",cursor.getString(4));
+            lossTime = Calendar.getInstance();
             lossTime.setTime(sdf.parse(cursor.getString(4)));
         }
         catch(Exception e){
-            System.out.println("Item 정보를 읽어오는 도중, 시간이 잘못되었습니다.");
+            Log.d("ItemInfo","Item 정보를 읽어오는 도중, 시간이 잘못되었습니다.");
         }
     }
 }

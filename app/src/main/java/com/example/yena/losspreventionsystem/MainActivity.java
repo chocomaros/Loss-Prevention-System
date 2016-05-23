@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -113,10 +114,12 @@ public class MainActivity extends AppCompatActivity {
                     btAlarm.setImageResource(R.drawable.ic_alarm_off);
                     alarmControl = ALARM_ALL_OFF;
                     editor.putInt(LPSSharedPreferences.ALARM_CONTROL,alarmControl);
+                    Toast.makeText(getApplicationContext(),"알람 꺼짐",Toast.LENGTH_SHORT).show();
                 } else{
                     btAlarm.setImageResource(R.drawable.ic_alarm_on);
                     alarmControl = ALARM_ALL_ON;
                     editor.putInt(LPSSharedPreferences.ALARM_CONTROL,alarmControl);
+                    Toast.makeText(getApplicationContext(),"알람 켜짐",Toast.LENGTH_SHORT).show();
                 }
                 editor.commit();
             }

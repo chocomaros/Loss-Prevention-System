@@ -74,12 +74,18 @@ public class PutItemToGroupActivity extends AppCompatActivity {
                     groupSaveDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
-                            //TODO 그룹에 이미 물건 있을때 어케 처리할것인가?
                             if(groupSaveDialog.getSaveButtonClicked()){
+                                ArrayList<ItemInfo> items;
+                                items = LPSDAO.getItemListOfGroup(getApplicationContext(),groupSaveDialog.getSavedGroup());
                                 for(int i=0;i<itemsInGroup.size();i++){
-                                    Log.d("itemsInGroup",itemsInGroup.get(i).name + " , alarmStatus : " + itemsInGroup.get(i).alarmStatus);
-                                    Log.d("getSavedGroup",groupSaveDialog.getSavedGroup().name + "group ID : " + groupSaveDialog.getSavedGroup().id);
-                                    LPSDAO.insertItemGroup(context,itemsInGroup.get(i),groupSaveDialog.getSavedGroup());
+                                    for(int j=0; j<items.size(); j++){
+                                        if(itemsInGroup.get(i).beaconID.equals(items.get(j).beaconID)){
+                                            break;
+                                        }
+                                        if(j == items.size() -1){
+                                            LPSDAO.insertItemGroup(context,itemsInGroup.get(i),groupSaveDialog.getSavedGroup());
+                                        }
+                                    }
                                 }
                                 finish();
                             }

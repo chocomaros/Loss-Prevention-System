@@ -77,7 +77,6 @@ public class GroupSaveDialog extends Dialog {
                         } else{
                             if(i == adapter.groupList.size() - 1){
                                 //라디오버튼 체크된게 없을 때
-                                Log.d("GroupSaveDialog", "라디오버튼 체크된게 없을 때");
                                 printAlertDialog("그룹 체크 확인", "체크된 그룹이 있는지 확인해주세요.");
                             }
                         }

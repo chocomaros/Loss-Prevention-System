@@ -12,9 +12,9 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="brightGray">#a7a6a6</color>
-    <color name="largeCircle">#ff4848</color>
-    <color name="middleCircle">#ffed66</color>
-    <color name="smallCircle">#63ff72</color>
+    <color name="largeCircle">#ff5858</color>
+    <color name="middleCircle">#ffee73</color>
+    <color name="smallCircle">#7aff87</color>
 
 
 </resources>

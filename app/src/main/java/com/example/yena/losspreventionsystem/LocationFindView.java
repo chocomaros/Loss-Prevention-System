@@ -13,10 +13,16 @@ import android.view.View;
  */
 public class LocationFindView extends View {
 
+    private static final int ALPHA_MAX = 255, ALPHA_MIN = 0, ALPHA_RATE = 3;
+
     private int lcRadius, mcRadius, scRadius;
     private int lcColor, mcColor, scColor;
     private String label;
     private int labelColor;
+
+    private int alpha;
+    private boolean alphaPlus;
+    private boolean lcActivated, mcActivated, scActivated;
 
     private Paint lcPaint, mcPaint, scPaint, labelPaint;
     private int viewWidthHalf, viewHeightHalf;
@@ -42,10 +48,6 @@ public class LocationFindView extends View {
         labelPaint.setTextAlign(Paint.Align.CENTER);
         labelPaint.setTextSize(100);
 
-//        circleStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//        circleStrokePaint.setStyle(Paint.Style.STROKE);
-//        circleStrokePaint.setStrokeWidth(2);
-//        circleStrokePaint.setColor(circleStrokeColor);
     }
 
     public void init(AttributeSet attrs)
@@ -56,23 +58,52 @@ public class LocationFindView extends View {
         scColor = attrsArray.getColor(R.styleable.locationFindView_scColor, 0);
         label = attrsArray.getString(R.styleable.locationFindView_label);
         labelColor = attrsArray.getColor(R.styleable.locationFindView_labelColor, 0);
+
+        alpha = 0;
+        alphaPlus = true;
+        lcActivated = false;
+        mcActivated = false;
+        scActivated = false;
+
         attrsArray.recycle();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
         lcPaint.setColor(lcColor);
         mcPaint.setColor(mcColor);
         scPaint.setColor(scColor);
         labelPaint.setColor(labelColor);
 
-        Log.d("radius", "scRadius : " + scRadius + " mcRadius : " + mcRadius + " lcRadius : " + lcRadius);
+        if(lcActivated){
+            lcPaint.setAlpha(alpha);
+        } else if(mcActivated){
+            mcPaint.setAlpha(alpha);
+        } else if(scActivated){
+            scPaint.setAlpha(alpha);
+        }
 
         canvas.drawCircle(viewWidthHalf, viewHeightHalf, lcRadius, lcPaint);
         canvas.drawCircle(viewWidthHalf, viewHeightHalf, mcRadius, mcPaint);
         canvas.drawCircle(viewWidthHalf, viewHeightHalf, scRadius, scPaint);
         canvas.drawText(label, viewWidthHalf, viewHeightHalf, labelPaint);
+
+        if(alphaPlus){
+            if(alpha < ALPHA_MAX){
+                alpha += ALPHA_RATE;
+            } else{
+                alphaPlus = false;
+            }
+        } else{
+            if(alpha > ALPHA_MIN){
+                alpha -= ALPHA_RATE;
+            } else{
+                alphaPlus = true;
+            }
+        }
+        invalidate();
     }
 
     @Override
@@ -88,5 +119,21 @@ public class LocationFindView extends View {
         }
         mcRadius = lcRadius * 2 / 3;
         scRadius = lcRadius / 3;
+    }
+
+    public void setLcActivatedTrue(){
+        this.lcActivated = true;
+        this.mcActivated = false;
+        this.scActivated = false;
+    }
+    public void setMcActivatedTrue(){
+        this.lcActivated = false;
+        this.mcActivated = true;
+        this.scActivated = false;
+    }
+    public void setScActivatedTrue(){
+        this.lcActivated = false;
+        this.mcActivated = false;
+        this.scActivated = true;
     }
 }

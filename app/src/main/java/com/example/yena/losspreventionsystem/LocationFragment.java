@@ -17,10 +17,11 @@ import java.util.ArrayList;
 
 public class LocationFragment extends Fragment {
 
+    private static final int LARGE_CIRCLE_RANGE = 70, MIDDLE_CIRCLE_RANGE = 40, SMALL_CIRCLE_RANGE = 20;
+
     private Spinner spinnerItemSelection;
     private ItemInfo itemInfo;
     private ArrayList<ItemInfo> itemList;
-    private FrameLayout flLocation;
     private LocationFindView locationFindView;
 
     public LocationFragment(){
@@ -46,6 +47,7 @@ public class LocationFragment extends Fragment {
         spinnerItemSelection.setOnItemSelectedListener(itemSelectedListener);
 
         locationFindView = (LocationFindView)view.findViewById(R.id.view_location_find);
+        locationFindView.setScActivatedTrue(); //TODO 거리에 따라 어느 곳에 알파값 줄건지
 
         return view;
     }
@@ -54,7 +56,6 @@ public class LocationFragment extends Fragment {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
             itemInfo = itemList.get(position);
-            Toast.makeText(getContext(),itemInfo.name,Toast.LENGTH_SHORT).show();
         }
 
         @Override
