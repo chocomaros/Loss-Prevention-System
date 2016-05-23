@@ -23,13 +23,30 @@
         android:layout_below="@+id/tv_find_item"
         android:background="@drawable/rounded_corner_border"/>
 
-    <FrameLayout
-        android:id="@+id/fl_location_find"
+    <RelativeLayout
+        android:id="@+id/rl_location_find"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"
+        android:layout_marginBottom="20dp"
         android:layout_below="@id/spinner_location_item"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"></FrameLayout>
+        android:layout_centerHorizontal="true">
+
+        <com.example.yena.losspreventionsystem.LocationFindView
+            xmlns:findview="http://schemas.android.com/apk/res/com.example.yena.losspreventionsystem"
+            android:id="@+id/view_location_find"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            findview:lcColor="@color/largeCircle"
+            findview:mcColor="@color/middleCircle"
+            findview:scColor="@color/smallCircle"
+            findview:label="asdf"
+            findview:labelColor="@color/black"
+            />
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>

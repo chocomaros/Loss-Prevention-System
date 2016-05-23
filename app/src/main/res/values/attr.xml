@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="locationFindView">
+        <!--<attr name="scRadius" format="integer" />-->
+        <!--<attr name="mcRadius" format="integer" />-->
+        <!--<attr name="lcRadius" format="integer" />-->
+        <attr name="scColor" format="color" />
+        <attr name="mcColor" format="color" />
+        <attr name="lcColor" format="color" />
+        <!--<attr name="cStrokeColor" format="color" />-->
+        <attr name="label" format="string"/>
+        <attr name="labelColor" format="color"/>
+
+    </declare-styleable>
+</resources>

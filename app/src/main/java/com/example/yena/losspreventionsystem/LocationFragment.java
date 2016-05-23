@@ -21,6 +21,7 @@ public class LocationFragment extends Fragment {
     private ItemInfo itemInfo;
     private ArrayList<ItemInfo> itemList;
     private FrameLayout flLocation;
+    private LocationFindView locationFindView;
 
     public LocationFragment(){
     }
@@ -43,6 +44,9 @@ public class LocationFragment extends Fragment {
         spinnerItemSelection = (Spinner)view.findViewById(R.id.spinner_location_item);
         spinnerItemSelection.setAdapter(adapter);
         spinnerItemSelection.setOnItemSelectedListener(itemSelectedListener);
+
+        locationFindView = (LocationFindView)view.findViewById(R.id.view_location_find);
+
         return view;
     }
 
