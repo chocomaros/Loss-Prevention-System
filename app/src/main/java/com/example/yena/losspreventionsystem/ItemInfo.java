@@ -18,6 +18,7 @@ public class ItemInfo implements Serializable {
     double distance;
     int alarmStatus;
     Calendar lossTime;
+    boolean lossCheck;
     boolean checked = false;
 
     public ItemInfo(){}
@@ -59,6 +60,7 @@ public class ItemInfo implements Serializable {
         this.alarmStatus = alarmStatus;
         this.lossTime = Calendar.getInstance();
         this.lossTime.setTimeInMillis(0);
+        this.lossCheck = false;
     }
 
     public ItemInfo(Cursor cursor){
@@ -74,6 +76,19 @@ public class ItemInfo implements Serializable {
         }
         catch(Exception e){
             Log.d("ItemInfo","Item 정보를 읽어오는 도중, 시간이 잘못되었습니다.");
+        }
+        if(cursor.getInt(5) == 0){
+            lossCheck = false;
+        } else if(cursor.getInt(5) == 1){
+            lossCheck = true;
+        }
+    }
+
+    int lossCheckToInt(){
+        if(lossCheck){
+            return 1;
+        } else{
+            return 0;
         }
     }
 }

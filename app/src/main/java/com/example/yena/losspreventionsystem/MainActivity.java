@@ -18,11 +18,11 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int ALARM_ALL_OFF = 0, ALARM_ALL_ON = 1;
+
     private static final int REQUEST_PUT_ITEM_TO_GROUP = 0;
     private ImageButton btPutGroup, btAlarm;
     private FloatingActionButton fab;
-    private int alarmControl = ALARM_ALL_ON;
+    private int alarmControl = AlarmManagement.ALARM_ALL_ON;
     private SharedPreferences pref;
 
     @Override
@@ -36,12 +36,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         pref = this.getSharedPreferences(LPSSharedPreferences.NAME, 0);
-        alarmControl = pref.getInt(LPSSharedPreferences.ALARM_CONTROL,ALARM_ALL_ON);
+        alarmControl = pref.getInt(LPSSharedPreferences.ALARM_CONTROL,AlarmManagement.ALARM_ALL_ON);
 
         btPutGroup = (ImageButton) findViewById(R.id.ib_put_in_group);
         btAlarm = (ImageButton) findViewById(R.id.ib_alarm);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        if(alarmControl == ALARM_ALL_OFF) {
+        if(alarmControl == AlarmManagement.ALARM_ALL_OFF) {
             btAlarm.setImageResource(R.drawable.ic_alarm_off);
         }
 
@@ -109,15 +109,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = pref.edit();
-                alarmControl = pref.getInt(LPSSharedPreferences.ALARM_CONTROL,ALARM_ALL_ON);
-                if(alarmControl == ALARM_ALL_ON){
+                alarmControl = pref.getInt(LPSSharedPreferences.ALARM_CONTROL,AlarmManagement.ALARM_ALL_ON);
+                if(alarmControl == AlarmManagement.ALARM_ALL_ON){
                     btAlarm.setImageResource(R.drawable.ic_alarm_off);
-                    alarmControl = ALARM_ALL_OFF;
+                    alarmControl = AlarmManagement.ALARM_ALL_OFF;
                     editor.putInt(LPSSharedPreferences.ALARM_CONTROL,alarmControl);
                     Toast.makeText(getApplicationContext(),"알람 꺼짐",Toast.LENGTH_SHORT).show();
                 } else{
                     btAlarm.setImageResource(R.drawable.ic_alarm_on);
-                    alarmControl = ALARM_ALL_ON;
+                    alarmControl = AlarmManagement.ALARM_ALL_ON;
                     editor.putInt(LPSSharedPreferences.ALARM_CONTROL,alarmControl);
                     Toast.makeText(getApplicationContext(),"알람 켜짐",Toast.LENGTH_SHORT).show();
                 }

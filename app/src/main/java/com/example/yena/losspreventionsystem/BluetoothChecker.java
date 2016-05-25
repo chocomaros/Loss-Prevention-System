@@ -18,7 +18,12 @@ public class BluetoothChecker {
     // Intent request code
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
+
     // Constructors
+    public BluetoothChecker(){
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+    }
+
     public BluetoothChecker(Activity ac) {
         mActivity = ac;
 
@@ -56,10 +61,12 @@ public class BluetoothChecker {
 
             return false;
 
-        } else {
+        }
+        if(btAdapter.enable()) {
             Log.d(TAG, "Bluetooth is available");
-
             return true;
+        } else{
+            return false;
         }
     }
 

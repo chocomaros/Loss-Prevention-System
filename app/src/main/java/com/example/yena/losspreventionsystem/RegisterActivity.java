@@ -1,6 +1,7 @@
 package com.example.yena.losspreventionsystem;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -74,21 +75,22 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
                 ArrayList<ItemInfo> itemList;
                 Log.d("register item",itemInfo.beaconID + "," + itemInfo.name);
                 itemList = LPSDAO.getItemInfo(getApplicationContext());
-                    for(int i = 0; i<itemList.size(); i++){
-                        if(itemInfo.beaconID.equals(itemList.get(i).beaconID)){
-                            isExisted = true;
-                        }
+                for(int i = 0; i<itemList.size(); i++){
+                    if(itemInfo.beaconID.equals(itemList.get(i).beaconID)){
+                        isExisted = true;
                     }
+                }
                 if(isExisted){ //TODO 비콘 id 널값인지도 확인
                     printAlertDialog("등록 오류", "Beacon ID가 이미 존재하는 ID입니다.\n새로운 beacon으로 등록해주세요.");
                 } else{
                     if(itemInfo.name.isEmpty()){
                         printAlertDialog("등록 오류", "이름을 입력해주세요.");
                     } else{
-                        LPSDAO.insertItemInfo(getApplicationContext(),itemInfo);
+                        LPSDAO.insertItemInfo(getApplicationContext(), itemInfo);
                         if(alarmStatusSelect != AlarmManagement.DISABLE){
-                            //TODO 알람서비스하기
+                            startService(new Intent(RegisterActivity.this, LPSService.class));
                         }
+                        printAlertDialog("등록 완료", "등록이 완료되었습니다.");
                     }
                 }
             }
@@ -110,27 +112,40 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
                     case R.id.rb_alarm_vibration :
                         alarmStatusSelect = AlarmManagement.ALARM_VIBRATION;
                         break;
-                    case R.id.rb_alarm_sound :
+                    case R.id.rb_alarm_sound:
                         alarmStatusSelect = AlarmManagement.ALARM_SOUND;
                         break;
-                    case R.id.rb_alarm_sound_vibration :
+                    case R.id.rb_alarm_sound_vibration:
                         alarmStatusSelect = AlarmManagement.ALARM_SOUND_VIBRATION;
                         break;
                 }
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        beaconManager.unbind(this);
+    }
+
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             tvBeaconID.setText("");
-
+            double minDistance = 100;
+            int index = 0;
             // 비콘의 아이디와 거리를 측정하여 textView에 넣는다.
             for(Beacon beacon : beaconList){
-                tvBeaconID.append("\n"+beacon.getId1());
+                if(minDistance > beacon.getDistance()){
+                    minDistance = beacon.getDistance();
+                    index = beaconList.indexOf(beacon);
+                }
             }
-
-            // 자기 자신을 1초마다 호출
-            handler.sendEmptyMessageDelayed(0, 100);
+            if(beaconList.size() == 0){
+                printAlertDialog("비콘 확인", "주위에 비콘이 없습니다.");
+            } else{
+                tvBeaconID.setText(beaconList.get(index).getServiceUuid());
+            }
         }
     };
 
@@ -142,6 +157,7 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
             // 비콘이 감지되면 해당 함수가 호출된다. Collection<Beacon> beacons에는 감지된 비콘의 리스트가,
             // region에는 비콘들에 대응하는 Region 객체가 들어온다.
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+               Log.d("비콘 갯수",""+beacons.size());
                 if (beacons.size() > 0) {
                     beaconList.clear();
                     for (Beacon beacon : beacons) {
@@ -161,13 +177,16 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
 
     void printAlertDialog(String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
+        final String titleName = title;
         builder.setTitle(title)
                 .setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         dialog.cancel();
+                        if(titleName.equals("등록 완료")){
+                            finish();
+                        }
                     }
                 });
         AlertDialog dialog = builder.create();
