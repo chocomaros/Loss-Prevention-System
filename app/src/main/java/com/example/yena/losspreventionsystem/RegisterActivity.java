@@ -1,11 +1,14 @@
 package com.example.yena.losspreventionsystem;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.RemoteException;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
     private RadioGroup rgAlarmSelect;
 
     private int alarmStatusSelect;
+    private boolean isExisted;
 
     List<Beacon> beaconList = new ArrayList<>();
     BeaconManager beaconManager;
@@ -48,6 +52,7 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
         btRegister = (Button)findViewById(R.id.bt_register);
 
         alarmStatusSelect = AlarmManagement.ALARM_VIBRATION;
+        isExisted = false;
 
 
         beaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(this);
@@ -65,7 +70,27 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
         btRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ItemInfo itemInfo = new ItemInfo(tvBeaconID.getText().toString(),etName.getText().toString(),0,alarmStatusSelect);
+                ArrayList<ItemInfo> itemList;
+                Log.d("register item",itemInfo.beaconID + "," + itemInfo.name);
+                itemList = LPSDAO.getItemInfo(getApplicationContext());
+                    for(int i = 0; i<itemList.size(); i++){
+                        if(itemInfo.beaconID.equals(itemList.get(i).beaconID)){
+                            isExisted = true;
+                        }
+                    }
+                if(isExisted){ //TODO 비콘 id 널값인지도 확인
+                    printAlertDialog("등록 오류", "Beacon ID가 이미 존재하는 ID입니다.\n새로운 beacon으로 등록해주세요.");
+                } else{
+                    if(itemInfo.name.isEmpty()){
+                        printAlertDialog("등록 오류", "이름을 입력해주세요.");
+                    } else{
+                        LPSDAO.insertItemInfo(getApplicationContext(),itemInfo);
+                        if(alarmStatusSelect != AlarmManagement.DISABLE){
+                            //TODO 알람서비스하기
+                        }
+                    }
+                }
             }
         });
 
@@ -132,5 +157,20 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
 
         } catch (RemoteException e) {
         }
+    }
+
+    void printAlertDialog(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
