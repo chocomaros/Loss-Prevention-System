@@ -1,6 +1,7 @@
 package com.example.yena.losspreventionsystem;
 
 import android.annotation.TargetApi;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -35,6 +36,9 @@ public class AlarmManagement {
 
     private static final int NOTIFICATION_ID = 1;
 
+    public AlarmManagement(){
+
+    }
     public AlarmManagement(Context context){
         this.context = context;
     }
@@ -63,18 +67,18 @@ public class AlarmManagement {
         builder.setNeutralButton("close", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch(alarmStatus){
-                    case ALARM_SOUND :
+                switch (alarmStatus) {
+                    case ALARM_SOUND:
                         Cancel_Ringtone();
                         break;
-                    case ALARM_VIBRATION :
+                    case ALARM_VIBRATION:
                         Cancel_Vib();
                         break;
-                    case ALARM_SOUND_VIBRATION :
+                    case ALARM_SOUND_VIBRATION:
                         Cancel_Vib();
                         Cancel_Ringtone();
                         break;
-                    case ALARM_SILENT :
+                    case ALARM_SILENT:
                         break;
                 }
             }
