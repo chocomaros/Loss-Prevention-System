@@ -14,6 +14,7 @@ import android.view.View;
 public class LocationFindView extends View {
 
     private static final int ALPHA_MAX = 255, ALPHA_MIN = 0, ALPHA_RATE = 3;
+    private static final int TEXT_SIZE = 100;
 
     private int lcRadius, mcRadius, scRadius;
     private int lcColor, mcColor, scColor;
@@ -46,7 +47,7 @@ public class LocationFindView extends View {
         scPaint.setStyle(Paint.Style.FILL);
         labelPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         labelPaint.setTextAlign(Paint.Align.CENTER);
-        labelPaint.setTextSize(100);
+        labelPaint.setTextSize(TEXT_SIZE);
 
     }
 
@@ -88,7 +89,7 @@ public class LocationFindView extends View {
         canvas.drawCircle(viewWidthHalf, viewHeightHalf, lcRadius, lcPaint);
         canvas.drawCircle(viewWidthHalf, viewHeightHalf, mcRadius, mcPaint);
         canvas.drawCircle(viewWidthHalf, viewHeightHalf, scRadius, scPaint);
-        canvas.drawText(label, viewWidthHalf, viewHeightHalf, labelPaint);
+        canvas.drawText(label, viewWidthHalf, viewHeightHalf + (TEXT_SIZE / 3), labelPaint);
 
         if(alphaPlus){
             if(alpha < ALPHA_MAX){

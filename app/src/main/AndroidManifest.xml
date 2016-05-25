@@ -50,7 +50,12 @@
         <activity
             android:name=".GroupInfoDetailActivity"
             android:label="@string/title_activity_group_info_detail2"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".LPSService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

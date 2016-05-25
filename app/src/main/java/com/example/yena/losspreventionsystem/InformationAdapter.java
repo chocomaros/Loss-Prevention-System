@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -85,6 +86,17 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
                     Intent intent = new Intent(v.getContext(),ItemInfoDetailActivity.class);
                     intent.putExtra("ItemInfo",itemInfo);
                     v.getContext().startActivity(intent);
+                }
+            }
+        });
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    itemList.get(position).checked=true;
+                } else {
+                    itemList.get(position).checked=false;
                 }
             }
         });

@@ -73,6 +73,7 @@ public class SettingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO 회원탈퇴
+
             }
         });
 
@@ -164,5 +165,16 @@ public class SettingFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
+//    public void startServiceMethod(View v){
+//        Intent Service = new Intent(v.getContext(), LPSService.class);
+//        startService(Service);
+//    }
+//
+//    public void stopServiceMethod(View v){
+//        Intent Service = new Intent(v.getContext(), LPSService.class);
+//        stopService(Service);
+//
+//    }
 
 }
