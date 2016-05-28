@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LPSService extends Service implements BeaconConsumer {
 
@@ -37,8 +39,10 @@ public class LPSService extends Service implements BeaconConsumer {
     private static String isConnect = "";
     org.altbeacon.beacon.BeaconManager beaconManager;
     ArrayList<Beacon> beaconList = new ArrayList<>();
-
+//    myhandler beaconHandler = new myhandler();
     BluetoothChecker bluetoothChecker;
+    Timer timer;
+    TimerTask timerTask;
 
     public LPSService() {
     }
@@ -56,11 +60,32 @@ public class LPSService extends Service implements BeaconConsumer {
 //        initMediaPlayer();
         beaconInit();
         bluetoothChecker = new BluetoothChecker();
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                for (Beacon beacon : beaconList) {
+                    if (beaconList.contains(beacon)) {
+                        Log.i(TAG, "connect");
+                        isConnect = "connect";
+                    } else isConnect = "disconnect";
+
+                    Log.i(TAG, "UUID : " + beacon.getServiceUuid() + " / " + "Major : " + beacon.getId2() + " / " + "Minor : " + beacon.getId3() + " / " + "Battery : " + beacon.getDataFields().get(0) + " / " + "Distance : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())) +
+                            "신호세기 : " + beacon.getTxPower() + " / " + "통신간격 : " + INTERVAL + "sec " + " / " + "연결상태 : " + isConnect + " / " + "m\n");
+
+                    compareDistance(beacon);
+                }
+            }
+        };
+
+        timer = new Timer();
+        timer.schedule(timerTask, 0, INTERVAL);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        beaconHandler.sendEmptyMessage(0);
+//        beaconHandler.started=true;
+//        beaconHandler.sendEmptyMessage(0);
 
         // TODO Auto-generated method stub
         return START_STICKY;
@@ -68,23 +93,25 @@ public class LPSService extends Service implements BeaconConsumer {
 
     @Override
     public void onDestroy() {
-        Log.d("service onDestroy", "서비스 종료");
-        beaconManager.unbind(this);
-        // TODO Auto-generated method stub
         super.onDestroy();
+        Log.d("service onDestroy", "서비스 종료");
+//        beaconHandler.started=false;
+//        beaconHandler.removeMessages(0);
+        beaconManager.unbind(this);
+        timer.cancel();
+        // TODO Auto-generated method stub
 //        Cancel_Vib();
 //        Cancel_Mus();
-
-
     }
+
     //=================================================================
     //  Thread로 작업할 부분
-    Runnable task = new Runnable(){
-        public void run(){
+//    Runnable task = new Runnable(){
+//        public void run(){
 //                Vibrator_pattern();
 //                mediaPlayer.start();
-        }
-    };
+//        }
+//    };
     // =================소리 경로지정 및 초기화 ======================
 //    private void initMediaPlayer() {
 //
@@ -133,7 +160,7 @@ public class LPSService extends Service implements BeaconConsumer {
                     if(itemList.get(i).lossCheck){
                         // 알람했는데 아직도 거리 안으로 못들어온거
                     } else{
-                        AlarmManagement alarmManagement = new AlarmManagement(); ///컨텍스트 안해줘서 오류나려나?
+                        AlarmManagement alarmManagement = new AlarmManagement(getApplicationContext()); ///컨텍스트 안해줘서 오류나려나?
                         itemList.get(i).lossTime = Calendar.getInstance();
                         itemList.get(i).lossCheck = true;
                         if(pref.getInt(LPSSharedPreferences.ALARM_CONTROL,AlarmManagement.ALARM_ALL_ON) == AlarmManagement.ALARM_ALL_OFF){
@@ -164,11 +191,8 @@ public class LPSService extends Service implements BeaconConsumer {
             // region에는 비콘들에 대응하는 Region 객체가 들어온다.
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 if (beacons.size() == 0) {
-                    Toast toast5 = Toast.makeText(getApplicationContext(), "탈주", Toast.LENGTH_LONG);
-                    toast5.show();
+                    Log.d("서비스","비콘 0개!");
                 } else if (beacons.size() > 0) {
-                    Toast toast5 = Toast.makeText(getApplicationContext(), "있음.", Toast.LENGTH_LONG);
-                    toast5.show();
                     beaconList.clear();
                     for (Beacon beacon : beacons) {
                         beaconList.add(beacon);
@@ -194,14 +218,15 @@ public class LPSService extends Service implements BeaconConsumer {
 
     }
 
-    Handler beaconHandler = new Handler() {
+    class myhandler extends Handler {
+        boolean started = false;
         public void handleMessage(Message msg) {
             // 비콘의 아이디와 거리를 측정하여 textView에 넣는다.
             for (Beacon beacon : beaconList) {
-                if(beaconList.contains(beacon)){
+                if (beaconList.contains(beacon)) {
                     Log.i(TAG, "connect");
                     isConnect = "connect";
-                }else isConnect = "disconnect";
+                } else isConnect = "disconnect";
 
                 Log.i(TAG, "UUID : " + beacon.getServiceUuid() + " / " + "Major : " + beacon.getId2() + " / " + "Minor : " + beacon.getId3() + " / " + "Battery : " + beacon.getDataFields().get(0) + " / " + "Distance : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())) +
                         "신호세기 : " + beacon.getTxPower() + " / " + "통신간격 : " + INTERVAL + "sec " + " / " + "연결상태 : " + isConnect + " / " + "m\n");
@@ -209,8 +234,10 @@ public class LPSService extends Service implements BeaconConsumer {
                 compareDistance(beacon);
             }
 
-            // 자기 자신을 INTERVAL 마다 호출
-            beaconHandler.sendEmptyMessageDelayed(0, INTERVAL);
+//             자기 자신을 INTERVAL 마다 호출
+            if(started){
+//                beaconHandler.sendEmptyMessageDelayed(0, INTERVAL);
+            }
         }
-    };
+    }
 }
