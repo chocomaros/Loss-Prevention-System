@@ -173,7 +173,7 @@ public class LPSService extends Service implements BeaconConsumer {
                     Log.d("서비스","비콘 0개!");
                 } else if (beacons.size() > 0) {
                     for (Beacon beacon : beacons) {
-                        //compareDistance(beacon);
+                        compareDistance(beacon);
                         Log.d("beacon distance", beacon.getDistance()+"");
                     }
                 }
