@@ -2,7 +2,10 @@ package com.example.yena.losspreventionsystem;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanSettings;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 /**
@@ -12,6 +15,8 @@ public class BluetoothChecker {
 
     private static final String TAG = "BluetoothService";
     BluetoothAdapter btAdapter;
+    BluetoothLeScanner bleScanner;
+    ScanSettings settings;
 
     private Activity mActivity;
 
@@ -22,6 +27,12 @@ public class BluetoothChecker {
     // Constructors
     public BluetoothChecker(){
         btAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (Build.VERSION.SDK_INT >= 21){
+            bleScanner = btAdapter.getBluetoothLeScanner();
+            settings = new ScanSettings.Builder()
+                    .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                    .build();
+        }
     }
 
     public BluetoothChecker(Activity ac) {

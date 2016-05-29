@@ -77,13 +77,19 @@ public class PutItemToGroupActivity extends AppCompatActivity {
                             if(groupSaveDialog.getSaveButtonClicked()){
                                 ArrayList<ItemInfo> items;
                                 items = LPSDAO.getItemListOfGroup(getApplicationContext(),groupSaveDialog.getSavedGroup());
-                                for(int i=0;i<itemsInGroup.size();i++){
-                                    for(int j=0; j<items.size(); j++){
-                                        if(itemsInGroup.get(i).beaconID.equals(items.get(j).beaconID)){
-                                            break;
-                                        }
-                                        if(j == items.size() -1){
-                                            LPSDAO.insertItemGroup(context,itemsInGroup.get(i),groupSaveDialog.getSavedGroup());
+                                if(items.size() == 0){
+                                    for(int i=0; i<itemsInGroup.size(); i++){
+                                        LPSDAO.insertItemGroup(getApplicationContext(),itemsInGroup.get(i),groupSaveDialog.getSavedGroup());
+                                    }
+                                } else{
+                                    for(int i=0;i<itemsInGroup.size();i++){
+                                        for(int j=0; j<items.size(); j++){
+                                            if(itemsInGroup.get(i).beaconID.equals(items.get(j).beaconID)){
+                                                break;
+                                            }
+                                            if(j == items.size() -1){
+                                                LPSDAO.insertItemGroup(context,itemsInGroup.get(i),groupSaveDialog.getSavedGroup());
+                                            }
                                         }
                                     }
                                 }

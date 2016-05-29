@@ -62,6 +62,14 @@ public class ItemInfo implements Serializable {
         this.lossTime.setTimeInMillis(0);
         this.lossCheck = false;
     }
+    public ItemInfo(String beaconID, String name, int alarmStatus, Calendar lossTime){
+        this.beaconID = beaconID;
+        this.name = name;
+        this.distance = 0;
+        this.alarmStatus = alarmStatus;
+        this.lossTime = lossTime;
+        this.lossCheck = false;
+    }
 
     public ItemInfo(Cursor cursor){
         beaconID = cursor.getString(0);
@@ -70,7 +78,6 @@ public class ItemInfo implements Serializable {
         alarmStatus = cursor.getInt(3);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA);
         try {
-            Log.d("ItemInfo",cursor.getString(4));
             lossTime = Calendar.getInstance();
             lossTime.setTime(sdf.parse(cursor.getString(4)));
         }

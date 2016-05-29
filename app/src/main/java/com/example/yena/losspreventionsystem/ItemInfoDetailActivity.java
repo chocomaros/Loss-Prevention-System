@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -15,6 +16,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -33,7 +36,13 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        itemInfo = (ItemInfo)intent.getSerializableExtra("ItemInfo");
+        ItemInfo getItemInfo = (ItemInfo)intent.getSerializableExtra("ItemInfo");
+        ArrayList<ItemInfo> itemList = LPSDAO.getItemInfo(this);
+        for(int i=0; i< itemList.size(); i++){
+            if(itemList.get(i).beaconID.equals(getItemInfo.beaconID)){
+                itemInfo = itemList.get(i);
+            }
+        }
 
         tvName = (TextView)findViewById(R.id.tv_item_detail_name);
         tvBeaconID = (TextView)findViewById(R.id.tv_item_detail_beacon_id);
@@ -44,11 +53,11 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
         tvName.setText(itemInfo.name);
         tvBeaconID.setText(itemInfo.beaconID);
         rgAlarm.check(firstAlarmStatus());
-
         if(itemInfo.lossTime.getTimeInMillis() == 0){
             tvLossTime.setText("x");
         } else {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA);
+
             tvLossTime.setText(sdf.format(new Date(itemInfo.lossTime.getTimeInMillis())));
         }
 

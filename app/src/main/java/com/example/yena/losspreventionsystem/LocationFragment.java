@@ -39,6 +39,7 @@ public class LocationFragment extends Fragment implements BeaconConsumer{
     private ArrayList<Beacon> beaconList;
     private boolean findBeacon;
 
+    private BluetoothChecker bluetoothChecker;
 
     public LocationFragment(){
     }
@@ -48,6 +49,7 @@ public class LocationFragment extends Fragment implements BeaconConsumer{
         super.onCreate(savedInstanceState);
         itemList = new ArrayList<>();
         itemList.addAll(LPSDAO.getItemInfo(getContext()));
+        bluetoothChecker = new BluetoothChecker();
         beaconInit();
         beaconList = new ArrayList<>();
     }
@@ -88,6 +90,17 @@ public class LocationFragment extends Fragment implements BeaconConsumer{
     }
 
     @Override
+    public void onPause() {
+        Log.d("onPause","처음");
+        super.onStop();
+        beaconManager.unbind(this);
+        if(bluetoothChecker.btAdapter.isEnabled()){
+            getApplicationContext().startService(new Intent(getApplicationContext(), LPSService.class));
+            Log.d("onPause","서비스 시작한 뒤");
+        }
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
@@ -105,30 +118,32 @@ public class LocationFragment extends Fragment implements BeaconConsumer{
             // region에는 비콘들에 대응하는 Region 객체가 들어온다.
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 Log.d("비콘 갯수", "" + beacons.size());
+                if(itemInfo != null) {
                     findBeacon = false;
                     for (Beacon beacon : beacons) {
-                        Log.d("거리",beacon.getDistance()+"m");
+                        Log.d("거리", beacon.getDistance() + "m");
                         if (beacon.getId1().toString().equals(itemInfo.beaconID)) {
                             findBeacon = true;
-                            locationFindView.setLabel(String.format("%.2f",beacon.getDistance()) + "m");
+                            locationFindView.setLabel(String.format("%.2f", beacon.getDistance()) + "m");
                             if (beacon.getDistance() <= SMALL_CIRCLE_RANGE) {
-                               locationFindView.setScActivatedTrue();
+                                locationFindView.setScActivatedTrue();
                                 break;
-                            } else if(beacon.getDistance() > SMALL_CIRCLE_RANGE && beacon.getDistance() <= MIDDLE_CIRCLE_RANGE){
+                            } else if (beacon.getDistance() > SMALL_CIRCLE_RANGE && beacon.getDistance() <= MIDDLE_CIRCLE_RANGE) {
                                 locationFindView.setMcActivatedTrue();
                                 break;
-                            } else if(beacon.getDistance() > MIDDLE_CIRCLE_RANGE && beacon.getDistance() <= LARGE_CIRCLE_RANGE){
+                            } else if (beacon.getDistance() > MIDDLE_CIRCLE_RANGE && beacon.getDistance() <= LARGE_CIRCLE_RANGE) {
                                 locationFindView.setLcActivatedTrue();
                                 break;
-                            } else{
+                            } else {
                                 locationFindView.setCircleActivatedFalse();
                                 break;
                             }
                         }
                     }
-                if(!findBeacon){
-                    locationFindView.setLabel("x");
-                    locationFindView.setCircleActivatedFalse();
+                    if (!findBeacon) {
+                        locationFindView.setLabel("x");
+                        locationFindView.setCircleActivatedFalse();
+                    }
                 }
             }
         });

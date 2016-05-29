@@ -10,9 +10,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by yena on 2016-04-10.
@@ -23,13 +27,10 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
 
     ArrayList<ItemInfo> itemList;
     private ImageButton ibSilent, ibVibration, ibSound, ibSoundVibration;
-    private Button btDisable;
 
-    private boolean checkBoxVisibility, distanceVisibility;
+    private boolean checkBoxVisibility;
     private Context context;
     private int activityState;
-
-    private double distance;
 
     public InformationAdapter(){
 
@@ -43,12 +44,10 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
             case MAIN :
                 activityState = MAIN;
                 checkBoxVisibility = false;
-                distanceVisibility = true;
                 break;
             case PUT_GROUP :
                 activityState = PUT_GROUP;
                 checkBoxVisibility = true;
-                distanceVisibility = false;
                 break;
         }
         this.itemList = itemList;
@@ -57,21 +56,36 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
     @Override
     public void onBindViewHolder(InformationAdapter.ViewHolder holder, final int position) {
         final ItemInfo itemInfo = new ItemInfo(itemList.get(position).beaconID,itemList.get(position).name,
-                itemList.get(position).distance,itemList.get(position).alarmStatus,false) ;
+                itemList.get(position).alarmStatus, itemList.get(position).lossTime) ;
 
         holder.tvName.setText(itemInfo.name);
-        holder. tvDistance.setText("거리 : "+itemInfo.distance);
-        ArrayList<GroupInfo> groupList;
-        groupList = LPSDAO.getGroupListOfItem(context,itemList.get(position));
-        String groupName = new String();
-        for(int i=0;i<groupList.size();i++) {
-            if(i != groupList.size() - 1){
-                groupName = groupName.concat(groupList.get(i).name + ", ");
-            } else{
-                groupName = groupName.concat(groupList.get(i).name);
-            }
+
+        if(itemInfo.lossTime.getTimeInMillis() == 0){
+            holder.tvLossTime.setText("x");
+        } else{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA);
+            holder.tvLossTime.setText(sdf.format(new Date(itemInfo.lossTime.getTimeInMillis())));
         }
-        holder.tvGroup.setText("그룹 : " + groupName);
+        switch (itemInfo.alarmStatus){
+            case AlarmManagement.DISABLE :
+                holder.ivAlarmStatus.setImageResource(R.drawable.ic_disable);
+                break;
+            case AlarmManagement.ALARM_OFF :
+                holder.ivAlarmStatus.setImageResource(R.drawable.ic_alarm_off2);
+                break;
+            case AlarmManagement.ALARM_SILENT :
+                holder.ivAlarmStatus.setImageResource(R.drawable.ic_silent);
+                break;
+            case AlarmManagement.ALARM_VIBRATION :
+                holder.ivAlarmStatus.setImageResource(R.drawable.ic_vibration);
+                break;
+            case AlarmManagement.ALARM_SOUND :
+                holder.ivAlarmStatus.setImageResource(R.drawable.ic_sound);
+                break;
+            case AlarmManagement.ALARM_SOUND_VIBRATION :
+                holder.ivAlarmStatus.setImageResource(R.drawable.ic_sound_vibration);
+                break;
+        }
 
         final CheckBox checkBox = holder.cbPutGroup;
         holder.view.setOnClickListener(new View.OnClickListener() {
@@ -121,26 +135,23 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
         View view;
 
-        TextView tvName, tvDistance, tvGroup;
+        TextView tvName, tvLossTime;
         CheckBox cbPutGroup;
+        ImageView ivAlarmStatus;
+
         public ViewHolder(View v){
             super(v);
             view = v;
 
             tvName = (TextView)view.findViewById(R.id.tv_item_name);
-            tvDistance = (TextView)view.findViewById(R.id.tv_item_distance);
-            tvGroup = (TextView)view.findViewById(R.id.tv_item_group);
+            tvLossTime = (TextView)view.findViewById(R.id.tv_item_loss_time);
             cbPutGroup = (CheckBox)view.findViewById(R.id.cb_put_group);
+            ivAlarmStatus = (ImageView)view.findViewById(R.id.iv_alarm_status);
 
             if(checkBoxVisibility){
                 cbPutGroup.setVisibility(View.VISIBLE);
             } else{
                 cbPutGroup.setVisibility(View.GONE);
-            }
-            if(distanceVisibility){
-                tvDistance.setVisibility(View.VISIBLE);
-            } else{
-                tvDistance.setVisibility(View.GONE);
             }
 
 

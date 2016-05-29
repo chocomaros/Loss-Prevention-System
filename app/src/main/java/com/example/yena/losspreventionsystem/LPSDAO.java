@@ -89,7 +89,7 @@ public class LPSDAO {
 
         //groupList.clear();
         Cursor cursor = db.rawQuery("select " +DBTable.ItemInfoTable.BEACON_ID + ", " + DBTable.ItemInfoTable.ITEM_NAME + ", " + DBTable.ItemInfoTable.ITEM_DISTANCE +
-                        ", " + DBTable.ItemInfoTable.ITEM_ALARM_STATUS + ", " + DBTable.ItemInfoTable.ITEM_LOSS_TIME +
+                        ", " + DBTable.ItemInfoTable.ITEM_ALARM_STATUS + ", " + DBTable.ItemInfoTable.ITEM_LOSS_TIME + ", " + DBTable.ItemInfoTable.ITEM_LOSS_CHECK +
                 " from " + DBTable.ItemGroupTable.TABLE_NAME + " NATURAL JOIN " + DBTable.ItemInfoTable.TABLE_NAME +
                 " where " + DBTable.ItemGroupTable.GROUP_ID + " = " + groupInfo.id + ";", null);
         while(cursor.moveToNext()){

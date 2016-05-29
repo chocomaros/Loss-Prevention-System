@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BluetoothChecker bluetoothChecker = new BluetoothChecker(this);
+        final BluetoothChecker bluetoothChecker = new BluetoothChecker(this);
         bluetoothChecker.enableBluetooth();
 
 
