@@ -47,14 +47,24 @@ public class AlarmManagement {
         notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Notification notify = new Notification.Builder(context)
-                .setTicker("아주 중요한 메시지")
-                .setContentTitle("중요한 메지지 이니 무조건 쳐보기")
-                .setContentText(item.lossTime.get(Calendar.HOUR_OF_DAY) +":" + item.lossTime.get(Calendar.MINUTE) + " 에 " + item.name + "을(를) 잃어버렸습니다.")
+                .setTicker("물건을 잃어버렸습니다.")
+                .setContentTitle("물건을 잃어버렸습니다.")
+                .setContentText(timeToString(item.lossTime.get(Calendar.HOUR_OF_DAY)) +":" + timeToString(item.lossTime.get(Calendar.MINUTE)) + " 에 " + item.name + "을(를) 잃어버렸습니다.")
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setWhen(System.currentTimeMillis())
                         .build();
 
         notificationManager.notify(NOTIFICATION_ID, notify);
+    }
+
+    String timeToString(int time){
+        String returnTime;
+        if(time < 10){
+            returnTime = "0"+String.valueOf(time);
+        } else{
+            returnTime = String.valueOf(time);
+        }
+        return returnTime;
     }
 
 }
