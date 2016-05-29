@@ -14,7 +14,7 @@ import android.view.View;
 public class LocationFindView extends View {
 
     private static final int ALPHA_MAX = 255, ALPHA_MIN = 0, ALPHA_RATE = 3;
-    private static final int TEXT_SIZE = 100;
+    private static final int TEXT_SIZE = 80;
 
     private int lcRadius, mcRadius, scRadius;
     private int lcColor, mcColor, scColor;
@@ -136,5 +136,13 @@ public class LocationFindView extends View {
         this.lcActivated = false;
         this.mcActivated = false;
         this.scActivated = true;
+    }
+    public void setCircleActivatedFalse(){
+        this.lcActivated = false;
+        this.mcActivated = false;
+        this.scActivated = false;
+    }
+    public void setLabel(String label){
+        this.label = label;
     }
 }

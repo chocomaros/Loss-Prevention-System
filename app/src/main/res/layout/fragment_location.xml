@@ -41,7 +41,7 @@
             findview:lcColor="@color/largeCircle"
             findview:mcColor="@color/middleCircle"
             findview:scColor="@color/smallCircle"
-            findview:label="asdf"
+            findview:label="wait"
             findview:labelColor="@color/black"
             />
 

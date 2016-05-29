@@ -18,6 +18,7 @@ import android.widget.Toast;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
@@ -61,25 +62,37 @@ public class LPSService extends Service implements BeaconConsumer {
         beaconInit();
         bluetoothChecker = new BluetoothChecker();
 
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                for (Beacon beacon : beaconList) {
-                    if (beaconList.contains(beacon)) {
-                        Log.i(TAG, "connect");
-                        isConnect = "connect";
-                    } else isConnect = "disconnect";
+        for (Beacon beacon : beaconList) {
+            if (beaconList.contains(beacon)) {
+                Log.i(TAG, "connect");
+                isConnect = "connect";
+            } else isConnect = "disconnect";
 
-                    Log.i(TAG, "UUID : " + beacon.getServiceUuid() + " / " + "Major : " + beacon.getId2() + " / " + "Minor : " + beacon.getId3() + " / " + "Battery : " + beacon.getDataFields().get(0) + " / " + "Distance : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())) +
-                            "신호세기 : " + beacon.getTxPower() + " / " + "통신간격 : " + INTERVAL + "sec " + " / " + "연결상태 : " + isConnect + " / " + "m\n");
+            Log.i(TAG, "UUID : " + beacon.getServiceUuid() + " / " + "Major : " + beacon.getId2() + " / " + "Minor : " + beacon.getId3() + " / " + "Battery : " + beacon.getDataFields().get(0) + " / " + "Distance : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())) +
+                    "신호세기 : " + beacon.getTxPower() + " / " + "통신간격 : " + INTERVAL + "sec " + " / " + "연결상태 : " + isConnect + " / " + "m\n");
 
-                    compareDistance(beacon);
-                }
-            }
-        };
+            compareDistance(beacon);
+        }
 
-        timer = new Timer();
-        timer.schedule(timerTask, 0, INTERVAL);
+//        timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                for (Beacon beacon : beaconList) {
+//                    if (beaconList.contains(beacon)) {
+//                        Log.i(TAG, "connect");
+//                        isConnect = "connect";
+//                    } else isConnect = "disconnect";
+//
+//                    Log.i(TAG, "UUID : " + beacon.getServiceUuid() + " / " + "Major : " + beacon.getId2() + " / " + "Minor : " + beacon.getId3() + " / " + "Battery : " + beacon.getDataFields().get(0) + " / " + "Distance : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())) +
+//                            "신호세기 : " + beacon.getTxPower() + " / " + "통신간격 : " + INTERVAL + "sec " + " / " + "연결상태 : " + isConnect + " / " + "m\n");
+//
+//                    compareDistance(beacon);
+//                }
+//            }
+//        };
+//
+//        timer = new Timer();
+//        timer.schedule(timerTask, 0, INTERVAL);
     }
 
     @Override
@@ -98,7 +111,7 @@ public class LPSService extends Service implements BeaconConsumer {
 //        beaconHandler.started=false;
 //        beaconHandler.removeMessages(0);
         beaconManager.unbind(this);
-        timer.cancel();
+//        timer.cancel();
         // TODO Auto-generated method stub
 //        Cancel_Vib();
 //        Cancel_Mus();
@@ -185,6 +198,27 @@ public class LPSService extends Service implements BeaconConsumer {
 
     @Override
     public void onBeaconServiceConnect() {
+        beaconManager.setMonitorNotifier(new MonitorNotifier() {
+            @Override
+            public void didEnterRegion(Region region) {
+
+            }
+
+            @Override
+            public void didExitRegion(Region region) {
+
+            }
+
+            @Override
+            public void didDetermineStateForRegion(int i, Region region) {
+                if(i == MonitorNotifier.INSIDE){
+                    Log.d("Region","안에 있다.");
+                } else if(i == MonitorNotifier.OUTSIDE){
+                    Log.d("Region","밖에 있다.");
+                }
+            }
+        });
+
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             // 비콘이 감지되면 해당 함수가 호출된다. Collection<Beacon> beacons에는 감지된 비콘의 리스트가,
@@ -204,7 +238,7 @@ public class LPSService extends Service implements BeaconConsumer {
 
         try {
             beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId", null, null, null));
-
+            beaconManager.startMonitoringBeaconsInRegion(new Region("abcd", null, null, null));
         } catch (RemoteException e) {
         }
     }

@@ -29,6 +29,8 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
     private Context context;
     private int activityState;
 
+    private double distance;
+
     public InformationAdapter(){
 
     }
@@ -56,6 +58,7 @@ public class InformationAdapter extends RecyclerView.Adapter<InformationAdapter.
     public void onBindViewHolder(InformationAdapter.ViewHolder holder, final int position) {
         final ItemInfo itemInfo = new ItemInfo(itemList.get(position).beaconID,itemList.get(position).name,
                 itemList.get(position).distance,itemList.get(position).alarmStatus,false) ;
+
         holder.tvName.setText(itemInfo.name);
         holder. tvDistance.setText("거리 : "+itemInfo.distance);
         ArrayList<GroupInfo> groupList;
