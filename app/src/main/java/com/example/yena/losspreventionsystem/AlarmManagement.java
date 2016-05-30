@@ -7,6 +7,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
@@ -43,7 +44,7 @@ public class AlarmManagement {
 
     //푸시 메시지
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-     void generateNotification(ItemInfo item) {
+     void generateLossNotification(ItemInfo item) {
         notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         Notification notify = new Notification.Builder(context)
@@ -53,6 +54,19 @@ public class AlarmManagement {
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setWhen(System.currentTimeMillis())
                         .build();
+
+        notificationManager.notify(NOTIFICATION_ID, notify);
+    }
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    void generateFindNotification(ItemInfo item, int settingDistance) {
+        notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notify = new Notification.Builder(context)
+                .setTicker("물건이 다시 " + settingDistance +"m 안으로 들어왔습니다.")
+                .setContentTitle("물건을 찾았습니다.")
+                .setContentText("물건이 다시 " + settingDistance +"m 안으로 들어왔습니다.")
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setWhen(System.currentTimeMillis())
+                .build();
 
         notificationManager.notify(NOTIFICATION_ID, notify);
     }

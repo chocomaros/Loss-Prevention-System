@@ -23,6 +23,8 @@ import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+import org.altbeacon.beacon.service.ArmaRssiFilter;
+import org.altbeacon.beacon.service.RunningAverageRssiFilter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +32,7 @@ import java.util.Collection;
 public class LocationFragment extends Fragment implements BeaconConsumer{
 
     private static final int LARGE_CIRCLE_RANGE = 70, MIDDLE_CIRCLE_RANGE = 40, SMALL_CIRCLE_RANGE = 20;
+    private static final long AVERAGE_TIME = 2000l;
 
     private Spinner spinnerItemSelection;
     private ItemInfo itemInfo;
@@ -67,7 +70,7 @@ public class LocationFragment extends Fragment implements BeaconConsumer{
         spinnerItemSelection.setOnItemSelectedListener(itemSelectedListener);
 
         locationFindView = (LocationFindView)view.findViewById(R.id.view_location_find);
-        locationFindView.setScActivatedTrue(); //TODO 거리에 따라 어느 곳에 알파값 줄건지
+        locationFindView.setCircleActivatedFalse();
 
         return view;
     }
@@ -87,6 +90,8 @@ public class LocationFragment extends Fragment implements BeaconConsumer{
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("onResume","여기여기");
+        beaconInit();
     }
 
     @Override
@@ -156,6 +161,11 @@ public class LocationFragment extends Fragment implements BeaconConsumer{
 
     public void beaconInit(){
         beaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(getApplicationContext());
+        BeaconManager.setRssiFilterImplClass(RunningAverageRssiFilter.class);
+        RunningAverageRssiFilter.setSampleExpirationMilliseconds(AVERAGE_TIME);
+//        ArmaRssiFilter armaRssiFilter = new ArmaRssiFilter();
+//        armaRssiFilter.setDEFAULT_ARMA_SPEED(0.3d);
+//        BeaconManager.setRssiFilterImplClass(ArmaRssiFilter.class);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         beaconManager.bind(this);
 

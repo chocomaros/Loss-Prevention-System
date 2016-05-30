@@ -39,10 +39,11 @@ public class LPSService extends Service implements BeaconConsumer {
 
     //비콘
     private static final String TAG = "ServiceActivity";
-    private static final int INTERVAL = 1000; /// 1초
+    private static final int INTERVAL = 300; /// 0.3초
     private static String isConnect = "";
     org.altbeacon.beacon.BeaconManager beaconManager;
     ArrayList<Beacon> beaconList = new ArrayList<>();
+    AlarmManagement alarmManagement;
 //    myhandler beaconHandler = new myhandler();
 //    BluetoothChecker bluetoothChecker;
 
@@ -58,9 +59,9 @@ public class LPSService extends Service implements BeaconConsumer {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        alarmManagement = new AlarmManagement(getApplicationContext());
         //bluetoothChecker = new BluetoothChecker();
-        beaconInit();
+
 
 //        for (Beacon beacon : beaconList) {
 //            if (beaconList.contains(beacon)) {
@@ -79,7 +80,7 @@ public class LPSService extends Service implements BeaconConsumer {
     public int onStartCommand(Intent intent, int flags, int startId) {
 //        beaconHandler.started=true;
 //        beaconHandler.sendEmptyMessage(0);
-
+        beaconInit();
         // TODO Auto-generated method stub
         return START_STICKY;
     }
@@ -103,8 +104,11 @@ public class LPSService extends Service implements BeaconConsumer {
         if(beacon.getDistance() <= maxDistance){
             for(int i=0; i<itemList.size(); i++){
                 if(itemList.get(i).beaconID.equals(beacon.getId1().toString())){
-                    itemList.get(i).lossCheck = false;
-                    LPSDAO.updateItemInfoLossCheck(getApplicationContext(),itemList.get(i));
+                    if(itemList.get(i).lossCheck){
+                        itemList.get(i).lossCheck = false;
+                        alarmManagement.generateFindNotification(itemList.get(i),maxDistance);
+                        LPSDAO.updateItemInfoLossCheck(getApplicationContext(),itemList.get(i));
+                    }
                 }
             }
         } else{
@@ -114,19 +118,18 @@ public class LPSService extends Service implements BeaconConsumer {
                         Log.d("service","알람했는데 아직 거리 안으로 못들어옴");
                         // 알람했는데 아직도 거리 안으로 못들어온거
                     } else{
-                        AlarmManagement alarmManagement = new AlarmManagement(getApplicationContext()); ///컨텍스트 안해줘서 오류나려나?
                         itemList.get(i).lossTime = Calendar.getInstance();
                         itemList.get(i).lossCheck = true;
                         if(pref.getInt(LPSSharedPreferences.ALARM_CONTROL,AlarmManagement.ALARM_ALL_ON) == AlarmManagement.ALARM_ALL_OFF){
                             /// 전체 알람 껐을때
-                            alarmManagement.generateNotification(itemList.get(i));
+                            alarmManagement.generateLossNotification(itemList.get(i));
                         } else{
                             Intent popupIntent = new Intent(LPSService.this, AlarmActivity.class)
                                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             popupIntent.putExtra(AlarmActivity.ITEM_INFO,itemList.get(i));
                             // 그리고 호출한다.
                             startActivity(popupIntent);
-                            alarmManagement.generateNotification(itemList.get(i));
+                            alarmManagement.generateLossNotification(itemList.get(i));
                         }
                         LPSDAO.updateItemInfoLossCheck(getApplicationContext(),itemList.get(i));
                         LPSDAO.updateItemInfoLossTime(getApplicationContext(), itemList.get(i));
@@ -196,6 +199,7 @@ public class LPSService extends Service implements BeaconConsumer {
             BeaconManager.setAndroidLScanningDisabled(true);
         }
         beaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(this);
+
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         if(beaconManager.isAndroidLScanningDisabled()){
             Log.d("androidL","scanning disabled");
