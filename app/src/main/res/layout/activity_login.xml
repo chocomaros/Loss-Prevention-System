@@ -53,19 +53,20 @@
         android:hint="PASSWORD"
         android:backgroundTint="@color/mint"/>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="자동 로그인"
-        android:id="@+id/cb_auto_login"
-        android:layout_below="@+id/et_password"
-        android:layout_alignRight="@+id/et_password"
-        android:layout_alignEnd="@+id/et_password"
-        android:layout_marginTop="100dp" />
+    <!--<CheckBox-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="자동 로그인"-->
+        <!--android:id="@+id/cb_auto_login"-->
+        <!--android:layout_below="@+id/et_password"-->
+        <!--android:layout_alignRight="@+id/et_password"-->
+        <!--android:layout_alignEnd="@+id/et_password"-->
+        <!--android:layout_marginTop="100dp" />-->
 
     <Button
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
+        android:layout_marginTop="120dp"
         android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -74,7 +75,7 @@
         android:textSize="20sp"
         android:textColor="@color/white"
         android:background="@color/mint"
-        android:layout_below="@+id/cb_auto_login" />
+        android:layout_below="@+id/et_password" />
 
     <Button
         android:layout_marginBottom="10dp"

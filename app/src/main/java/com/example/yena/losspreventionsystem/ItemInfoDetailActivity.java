@@ -26,7 +26,7 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
     private ItemInfo itemInfo;
     private TextView tvName, tvBeaconID, tvLossTime;
     private RadioGroup rgAlarm;
-    private ImageButton ibDelete;
+    private ImageButton ibDelete, ibLock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
         tvLossTime = (TextView)findViewById(R.id.tv_item_detail_loss_time);
         rgAlarm = (RadioGroup)findViewById(R.id.rg_item_detail_alarm);
         ibDelete = (ImageButton)findViewById(R.id.ib_delete_item);
+        ibLock = (ImageButton)findViewById(R.id.ib_lock_item);
 
         tvName.setText(itemInfo.name);
         tvBeaconID.setText(itemInfo.beaconID);
@@ -60,6 +61,13 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
 
             tvLossTime.setText(sdf.format(new Date(itemInfo.lossTime.getTimeInMillis())));
         }
+
+        ibLock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         ibDelete.setOnClickListener(new View.OnClickListener() {
             @Override

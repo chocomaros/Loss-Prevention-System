@@ -54,6 +54,7 @@ public class SettingFragment extends Fragment {
         });
 
         TextView tvLogout = (TextView)view.findViewById(R.id.tv_logout);
+
         tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,8 +73,7 @@ public class SettingFragment extends Fragment {
         tvUnregister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 회원탈퇴
-
+                printAlertDialog("회원 탈퇴", "정말로 탈퇴하시겠습니까?");
             }
         });
 
@@ -144,8 +144,39 @@ public class SettingFragment extends Fragment {
                 })
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        setDistanceText(tvAlarmDistanceValue, pref.getInt(LPSSharedPreferences.DISTANCE_SETTING,originalValue));
-                                dialog.cancel();
+                        setDistanceText(tvAlarmDistanceValue, pref.getInt(LPSSharedPreferences.DISTANCE_SETTING, originalValue));
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    void printAlertDialog(String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+
+        builder.setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString(LPSSharedPreferences.USER_ID, "");
+                        editor.putString(LPSSharedPreferences.USER_PW, "");
+                        editor.putBoolean(LPSSharedPreferences.AUTO_LOGIN, false);
+                        editor.commit();
+
+                        //TODO 서버에서 회원정보 지우는것도!!
+
+                        dialog.cancel();
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                        getActivity().finish();
                     }
                 });
         AlertDialog dialog = builder.create();

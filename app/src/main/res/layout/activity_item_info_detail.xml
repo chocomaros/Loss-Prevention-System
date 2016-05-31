@@ -29,7 +29,17 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:background="@drawable/image_title"
-                    android:layout_toLeftOf="@+id/ib_delete_item" />
+                    android:layout_toLeftOf="@+id/ib_lock_item" />
+
+                <ImageButton
+                    android:id="@+id/ib_lock_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/ib_delete_item"
+                    android:background="@drawable/ic_unlock"/>
+
 
                 <ImageButton
                     android:id="@+id/ib_delete_item"

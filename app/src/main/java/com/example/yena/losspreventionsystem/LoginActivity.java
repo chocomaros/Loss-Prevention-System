@@ -14,7 +14,7 @@ import android.widget.EditText;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etInputID, etInputPW;
-    private CheckBox cbAutoLogin;
+    //private CheckBox cbAutoLogin;
     private String id, password;
     private Button btLogin, btSignUp;
 
@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
 
         etInputID = (EditText)findViewById(R.id.et_id);
         etInputPW = (EditText)findViewById(R.id.et_password);
-        cbAutoLogin = (CheckBox)findViewById(R.id.cb_auto_login);
+       // cbAutoLogin = (CheckBox)findViewById(R.id.cb_auto_login);
         btLogin = (Button)findViewById(R.id.bt_login);
         btSignUp = (Button)findViewById(R.id.bt_sign_up);
 
@@ -42,42 +42,39 @@ public class LoginActivity extends AppCompatActivity {
             password = pref.getString(LPSSharedPreferences.USER_PW, "");
             etInputID.setText(id);
             etInputPW.setText(password);
-            cbAutoLogin.setChecked(true);
+           // cbAutoLogin.setChecked(true);
             //TODO 서버에 로그인 확인해야하나?
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
 
-        cbAutoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    autoLoginCheck = true;
-                }
-                else{
-                    autoLoginCheck = false;
-                }
-            }
-        });
+//        cbAutoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if(isChecked){
+//                    autoLoginCheck = true;
+//                }
+//                else{
+//                    autoLoginCheck = false;
+//                }
+//            }
+//        });
 
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (correctLogin()) {
                     SharedPreferences.Editor editor = pref.edit();
-                    if (autoLoginCheck) {
-                        id = etInputID.getText().toString();
-                        password = etInputPW.getText().toString();
 
-                        editor.putString(LPSSharedPreferences.USER_ID, id);
-                        editor.putString(LPSSharedPreferences.USER_PW, password);
-                        editor.putBoolean(LPSSharedPreferences.AUTO_LOGIN, true);
-                        editor.commit();
-                    } else {
-                        editor.putBoolean(LPSSharedPreferences.AUTO_LOGIN, false);
-                        editor.commit();
-                    }
+                    id = etInputID.getText().toString();
+                    password = etInputPW.getText().toString();
+
+                    editor.putString(LPSSharedPreferences.USER_ID, id);
+                    editor.putString(LPSSharedPreferences.USER_PW, password);
+                    editor.putBoolean(LPSSharedPreferences.AUTO_LOGIN, true);
+                    editor.commit();
+
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();

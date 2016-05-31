@@ -47,6 +47,8 @@ public class LPSService extends Service implements BeaconConsumer {
 //    myhandler beaconHandler = new myhandler();
 //    BluetoothChecker bluetoothChecker;
 
+    SharedPreferences pref;
+
     public LPSService() {
     }
 
@@ -59,6 +61,13 @@ public class LPSService extends Service implements BeaconConsumer {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        pref = getSharedPreferences(LPSSharedPreferences.NAME,0);
+        if(!pref.getBoolean(LPSSharedPreferences.AUTO_LOGIN, false)){
+            Log.d("stop service","로그인 안되어있지롱");
+            stopSelf();
+        }
+
         alarmManagement = new AlarmManagement(getApplicationContext());
         //bluetoothChecker = new BluetoothChecker();
 
