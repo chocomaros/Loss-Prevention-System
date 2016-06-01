@@ -101,22 +101,30 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
                 for (int i = 0; i < itemList.size(); i++) {
                     if (itemInfo.beaconID.equals(itemList.get(i).beaconID)) {
                         isExisted = true;
+                        break;
+                    }
+                    if(i == itemList.size() - 1){
+                        isExisted = false;
                     }
                 }
-                if (isExisted) { //TODO 비콘 id 널값인지도 확인
+                if (isExisted) {
                     printAlertDialog("등록 오류", "Beacon ID가 이미 존재하는 ID입니다.\n새로운 beacon으로 등록해주세요.");
                 } else {
                     if (itemInfo.name.isEmpty()) {
                         printAlertDialog("등록 오류", "이름을 입력해주세요.");
                     } else {
-                        LPSDAO.insertItemInfo(getApplicationContext(), itemInfo);
-                        if (alarmStatusSelect != AlarmManagement.DISABLE) {
-                            BluetoothChecker bluetoothChecker = new BluetoothChecker();
-                            if(bluetoothChecker.btAdapter.isEnabled()){
-                                startService(new Intent(RegisterActivity.this, LPSService.class));
+                        if(itemInfo.beaconID.isEmpty()){
+                            printAlertDialog("등록 오류", "비콘 아이디를 확인해주세요.");
+                        } else{
+                            LPSDAO.insertItemInfo(getApplicationContext(), itemInfo);
+                            if (alarmStatusSelect != AlarmManagement.DISABLE) {
+                                BluetoothChecker bluetoothChecker = new BluetoothChecker();
+                                if(bluetoothChecker.btAdapter.isEnabled()){
+                                    startService(new Intent(RegisterActivity.this, LPSService.class));
+                                }
                             }
+                            printAlertDialog("등록 완료", "등록이 완료되었습니다.");
                         }
-                        printAlertDialog("등록 완료", "등록이 완료되었습니다.");
                     }
                 }
             }

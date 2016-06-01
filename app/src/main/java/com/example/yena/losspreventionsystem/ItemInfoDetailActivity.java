@@ -51,6 +51,8 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
         ibDelete = (ImageButton)findViewById(R.id.ib_delete_item);
         ibLock = (ImageButton)findViewById(R.id.ib_lock_item);
 
+        setLockImage();
+
         tvName.setText(itemInfo.name);
         tvBeaconID.setText(itemInfo.beaconID);
         rgAlarm.check(firstAlarmStatus());
@@ -65,7 +67,13 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
         ibLock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(itemInfo.lock){
+                    itemInfo.lock = false;
+                } else{
+                    itemInfo.lock = true;
+                }
+                LPSDAO.updateItemInfoLock(getApplicationContext(), itemInfo);
+                setLockImage();
             }
         });
 
@@ -181,6 +189,14 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
                 return R.id.rb_alarm_sound_vibration_detail_item;
         }
         return 0;
+    }
+
+    void setLockImage(){
+        if(itemInfo.lock){
+            ibLock.setBackgroundResource(R.drawable.ic_lock);
+        } else{
+            ibLock.setBackgroundResource(R.drawable.ic_unlock);
+        }
     }
 
 }

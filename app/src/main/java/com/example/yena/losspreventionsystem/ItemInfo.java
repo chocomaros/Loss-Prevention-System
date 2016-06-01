@@ -19,6 +19,7 @@ public class ItemInfo implements Serializable {
     int alarmStatus;
     Calendar lossTime;
     boolean lossCheck;
+    boolean lock;
     boolean checked = false;
 
     public ItemInfo(){}
@@ -61,6 +62,7 @@ public class ItemInfo implements Serializable {
         this.lossTime = Calendar.getInstance();
         this.lossTime.setTimeInMillis(0);
         this.lossCheck = false;
+        this.lock = false;
     }
     public ItemInfo(String beaconID, String name, int alarmStatus, Calendar lossTime){
         this.beaconID = beaconID;
@@ -69,6 +71,7 @@ public class ItemInfo implements Serializable {
         this.alarmStatus = alarmStatus;
         this.lossTime = lossTime;
         this.lossCheck = false;
+        this.lock = false;
     }
 
     public ItemInfo(Cursor cursor){
@@ -89,10 +92,22 @@ public class ItemInfo implements Serializable {
         } else if(cursor.getInt(5) == 1){
             lossCheck = true;
         }
+        if(cursor.getInt(6) == 0){
+            lock = false;
+        } else if(cursor.getInt(6) == 1){
+            lock = true;
+        }
     }
 
     int lossCheckToInt(){
         if(lossCheck){
+            return 1;
+        } else{
+            return 0;
+        }
+    }
+    int lockToInt(){
+        if(lock){
             return 1;
         } else{
             return 0;

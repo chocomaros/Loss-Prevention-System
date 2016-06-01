@@ -105,7 +105,7 @@ public class LPSDAO {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA);
         db.execSQL("insert into " + DBTable.ItemInfoTable.TABLE_NAME +
                 " values ('" + itemInfo.beaconID + "', '" + itemInfo.name + "', " + itemInfo.distance + ", " + itemInfo.alarmStatus +
-                ", '" + sdf.format(new Date(itemInfo.lossTime.getTimeInMillis()))+ "', " + itemInfo.lossCheckToInt() + ");");
+                ", '" + sdf.format(new Date(itemInfo.lossTime.getTimeInMillis()))+ "', " + itemInfo.lossCheckToInt() + ", " + itemInfo.lockToInt() + ");");
     }
 
     public static void deleteItemInfo(Context context, ItemInfo itemInfo){
@@ -195,6 +195,14 @@ public class LPSDAO {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA);
         db.execSQL("update " + DBTable.ItemInfoTable.TABLE_NAME +
                 " set " + DBTable.ItemInfoTable.ITEM_LOSS_TIME + " = '" + sdf.format(new Date(itemInfo.lossTime.getTimeInMillis()))  + "'"+
+                " where " + DBTable.ItemInfoTable.BEACON_ID + " = '" + itemInfo.beaconID + "';");
+    }
+
+    public static void updateItemInfoLock(Context context, ItemInfo itemInfo){
+        LPSDBHelper dbHelper = new LPSDBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.execSQL("update " + DBTable.ItemInfoTable.TABLE_NAME +
+                " set " + DBTable.ItemInfoTable.ITEM_LOCK + " = " + itemInfo.lockToInt() +
                 " where " + DBTable.ItemInfoTable.BEACON_ID + " = '" + itemInfo.beaconID + "';");
     }
 }

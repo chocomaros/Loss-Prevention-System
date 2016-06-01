@@ -20,7 +20,8 @@ public class LPSDBHelper extends SQLiteOpenHelper {
             + DBTable.ItemInfoTable.ITEM_DISTANCE + " double , "
             + DBTable.ItemInfoTable.ITEM_ALARM_STATUS + " int, "
             + DBTable.ItemInfoTable.ITEM_LOSS_TIME + " text, "
-            + DBTable.ItemInfoTable.ITEM_LOSS_CHECK + " int ); ";
+            + DBTable.ItemInfoTable.ITEM_LOSS_CHECK + " int, "
+            + DBTable.ItemInfoTable.ITEM_LOCK + " int ); ";
 
     private static final String CREATE_TABLE_GROUP_INFO = "create table "
             + DBTable.GroupInfoTable.TABLE_NAME + "("
