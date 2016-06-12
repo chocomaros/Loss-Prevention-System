@@ -31,7 +31,7 @@ import java.util.Collection;
 
 public class LocationFragment extends Fragment implements BeaconConsumer{
 
-    private static final int LARGE_CIRCLE_RANGE = 70, MIDDLE_CIRCLE_RANGE = 40, SMALL_CIRCLE_RANGE = 20;
+    private static final int LARGE_CIRCLE_RANGE = 6, MIDDLE_CIRCLE_RANGE = 4, SMALL_CIRCLE_RANGE = 2;
     private static final long AVERAGE_TIME = 2000l;
 
     private Spinner spinnerItemSelection;
@@ -123,10 +123,13 @@ public class LocationFragment extends Fragment implements BeaconConsumer{
             // region에는 비콘들에 대응하는 Region 객체가 들어온다.
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 Log.d("비콘 갯수", "" + beacons.size());
+
                 if(itemInfo != null) {
                     findBeacon = false;
                     for (Beacon beacon : beacons) {
                         Log.d("거리", beacon.getDistance() + "m");
+                        Log.d("비콘uuid", "" + beacon.getId1()+beacon.getId2()+beacon.getId3());
+
                         if (beacon.getId1().toString().equals(itemInfo.beaconID)) {
                             findBeacon = true;
                             locationFindView.setLabel(String.format("%.2f", beacon.getDistance()) + "m");

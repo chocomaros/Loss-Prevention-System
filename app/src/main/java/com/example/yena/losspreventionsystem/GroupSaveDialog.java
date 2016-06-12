@@ -3,7 +3,9 @@ package com.example.yena.losspreventionsystem;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,9 +28,12 @@ public class GroupSaveDialog extends Dialog {
     private boolean saveButtonClicked = false;
     private RecyclerView recyclerView;
     private GroupAdapter adapter;
+    private SharedPreferences pref;
+
 
     public GroupSaveDialog(Context context){
         super(context);
+        pref = context.getSharedPreferences(LPSSharedPreferences.NAME, 0);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_group_save);
@@ -123,11 +128,33 @@ public class GroupSaveDialog extends Dialog {
                         if(input.getText().toString().isEmpty()){
                             printAlertDialog("이름 확인","그룹 이름을 입력하지않았습니다.");
                         } else{
-                            GroupInfo newGroup = new GroupInfo();
+                            final GroupInfo newGroup = new GroupInfo();
                             newGroup.name = input.getText().toString();
-                            LPSDAO.insertGroupInfo(getContext(),newGroup);
+                            //LPSDAO.insertGroupInfo(getContext(),newGroup);
+
+
+                            new AsyncTask<String, String, Integer>() {
+                                @Override
+                                protected Integer doInBackground(String... params) {
+
+                                    return NetworkManager.addGroup(getContext(), pref.getString(LPSSharedPreferences.USER_ID, ""), newGroup.name, LPSDAO.insertGroupInfo(getContext(), newGroup));
+
+                                }
+                                //메인쓰레드로
+                                @Override
+                                protected void onPostExecute(Integer aBoolean) {
+
+                                    adapter.groupList = LPSDAO.getGroupInfo(getContext());
+                                    adapter.notifyDataSetChanged();
+
+
+                                }
+                            }.execute("");
+
                             adapter.groupList = LPSDAO.getGroupInfo(getContext());
                             adapter.notifyDataSetChanged();
+
+
                         }
                     }
                 });

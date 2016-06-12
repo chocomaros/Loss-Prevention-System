@@ -3,6 +3,8 @@ package com.example.yena.losspreventionsystem;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +16,10 @@ import android.view.View;
 import android.widget.Button;
 
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class PutItemToGroupActivity extends AppCompatActivity {
 
@@ -24,12 +29,14 @@ public class PutItemToGroupActivity extends AppCompatActivity {
     private Button btCancel, btSave;
     private GroupSaveDialog groupSaveDialog;
     private Context context;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_put_item_to_group);
         context = getApplicationContext();
+        pref = context.getSharedPreferences(LPSSharedPreferences.NAME, 0);
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_information_put_group);
 
@@ -78,8 +85,28 @@ public class PutItemToGroupActivity extends AppCompatActivity {
                                 ArrayList<ItemInfo> items;
                                 items = LPSDAO.getItemListOfGroup(getApplicationContext(),groupSaveDialog.getSavedGroup());
                                 if(items.size() == 0){
-                                    for(int i=0; i<itemsInGroup.size(); i++){
-                                        LPSDAO.insertItemGroup(getApplicationContext(),itemsInGroup.get(i),groupSaveDialog.getSavedGroup());
+                                    int i;
+                                    for(i=0; i<itemsInGroup.size(); i++){
+
+
+                                        final String beaconID = itemsInGroup.get(i).beaconID;
+                                        final ItemInfo tempItem = itemsInGroup.get(i);
+
+                                        new AsyncTask<String, String, Integer>() {
+                                            @Override
+                                            protected Integer doInBackground(String... params) {
+                                                return NetworkManager.addItemGroup(getApplicationContext(), pref.getString(LPSSharedPreferences.USER_ID, ""), LPSDAO.insertItemGroup(getApplicationContext(),tempItem ,groupSaveDialog.getSavedGroup()), groupSaveDialog.getSavedGroup().id, beaconID);
+                                            }
+
+                                            //메인쓰레드로
+                                            @Override
+                                            protected void onPostExecute(Integer aBoolean) {
+                                                if (aBoolean==1){
+
+                                                }
+                                            }
+                                        }.execute("");
+
                                     }
                                 } else{
                                     for(int i=0;i<itemsInGroup.size();i++){
@@ -89,6 +116,23 @@ public class PutItemToGroupActivity extends AppCompatActivity {
                                             }
                                             if(j == items.size() -1){
                                                 LPSDAO.insertItemGroup(context,itemsInGroup.get(i),groupSaveDialog.getSavedGroup());
+
+                                                final String beaconID = itemsInGroup.get(i).beaconID;
+                                                final ItemInfo tempItem = itemsInGroup.get(i);
+                                                new AsyncTask<String, String, Integer>() {
+                                                    @Override
+                                                    protected Integer doInBackground(String... params) {
+                                                        return NetworkManager.addItemGroup(getApplicationContext(), pref.getString(LPSSharedPreferences.USER_ID, ""),LPSDAO.insertItemGroup(getApplicationContext(),tempItem ,groupSaveDialog.getSavedGroup()), groupSaveDialog.getSavedGroup().id, beaconID);
+                                                    }
+
+                                                    //메인쓰레드로
+                                                    @Override
+                                                    protected void onPostExecute(Integer aBoolean) {
+                                                        if (aBoolean==1){
+
+                                                        }
+                                                    }
+                                                }.execute("");
                                             }
                                         }
                                     }

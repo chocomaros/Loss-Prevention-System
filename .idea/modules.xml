@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LossPreventionSystem.iml" filepath="$PROJECT_DIR$/LossPreventionSystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Loss-Prevention-System.iml" filepath="$PROJECT_DIR$/Loss-Prevention-System.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app2.iml" filepath="$PROJECT_DIR$/app/app2.iml" />
     </modules>
   </component>

@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,12 +20,13 @@ import android.widget.TextView;
 
 public class SettingFragment extends Fragment {
 
-    public static final int DISTANCE1 = 10, DISTANCE2 = 30, DISTANCE3 = 50, DISTANCE4 = 70;
+    public static final int DISTANCE1 = 5, DISTANCE2 = 10, DISTANCE3 = 15, DISTANCE4 = 20;
 
     private SharedPreferences pref;
     private View view;
     private int originalValue;
     private TextView tvAlarmDistanceSetting, tvAlarmDistanceValue;
+    Context context;
 
     public SettingFragment() {
         // Required empty public constructor
@@ -63,6 +66,7 @@ public class SettingFragment extends Fragment {
                 editor.putString(LPSSharedPreferences.USER_PW, "");
                 editor.putBoolean(LPSSharedPreferences.AUTO_LOGIN, false);
                 editor.commit();
+                LPSDAO.resetTableAll(getContext());
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
                 getActivity().finish();
@@ -73,6 +77,7 @@ public class SettingFragment extends Fragment {
         tvUnregister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("d아이디",""+pref.getString(LPSSharedPreferences.USER_ID,""));
                 printAlertDialog("회원 탈퇴", "정말로 탈퇴하시겠습니까?");
             }
         });
@@ -166,13 +171,34 @@ public class SettingFragment extends Fragment {
                 })
                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
+
+
+
+
+                        new AsyncTask<String, String, Integer>() {
+                            @Override
+                            protected Integer doInBackground(String... params) {
+
+                                Log.d("d아이디",""+pref.getString(LPSSharedPreferences.USER_ID,""));
+                                return NetworkManager.deleteUser(getActivity().getApplicationContext(), pref.getString(LPSSharedPreferences.USER_ID, ""));
+
+                            }
+                            //메인쓰레드로
+                            @Override
+                            protected void onPostExecute(Integer aBoolean) {
+                            }
+                        }.execute("");
+
+
+                        LPSDAO.resetTableAll(getActivity().getApplicationContext());
                         SharedPreferences.Editor editor = pref.edit();
-                        editor.putString(LPSSharedPreferences.USER_ID, "");
+                        /*editor.putString(LPSSharedPreferences.USER_ID, "");
                         editor.putString(LPSSharedPreferences.USER_PW, "");
                         editor.putBoolean(LPSSharedPreferences.AUTO_LOGIN, false);
-                        editor.commit();
+                        editor.commit();*/
 
-                        //TODO 서버에서 회원정보 지우는것도!!
+                        editor.putBoolean(LPSSharedPreferences.AUTO_LOGIN, false);
+                        editor.commit();
 
                         dialog.cancel();
                         startActivity(new Intent(getActivity(), LoginActivity.class));

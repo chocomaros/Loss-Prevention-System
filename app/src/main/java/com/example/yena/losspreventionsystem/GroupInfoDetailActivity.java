@@ -1,8 +1,11 @@
 package com.example.yena.losspreventionsystem;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +22,10 @@ import android.widget.TextView;
 
 import java.lang.reflect.Array;
 import java.security.acl.Group;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class GroupInfoDetailActivity extends AppCompatActivity {
 
@@ -33,6 +39,7 @@ public class GroupInfoDetailActivity extends AppCompatActivity {
     private ArrayList<ItemInfo> itemsInGroup;
     private ArrayAdapter<String> adapter;
     private ItemInfo deleteItemInfo;
+    private SharedPreferences pref;
 
     private int groupAlarmStatus;
 
@@ -42,6 +49,7 @@ public class GroupInfoDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group_info_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        pref = getSharedPreferences(LPSSharedPreferences.NAME, 0);
 
         Intent intent = getIntent();
         groupInfo = (GroupInfo)intent.getSerializableExtra("GroupInfo");
@@ -139,12 +147,54 @@ public class GroupInfoDetailActivity extends AppCompatActivity {
                 .setPositiveButton("네", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         if(type == GROUP_DELETE){
+
+                            new AsyncTask<String, String, Integer>() {
+                                @Override
+                                protected Integer doInBackground(String... params) {
+
+                                    return NetworkManager.allGroupDeleteItemGroup(getApplicationContext(), pref.getString(LPSSharedPreferences.USER_ID, ""), groupInfo.id);
+
+                                }
+                                //메인쓰레드로
+                                @Override
+                                protected void onPostExecute(Integer aBoolean) {
+
+                                }
+                            }.execute("");
+
+                            new AsyncTask<String, String, Integer>() {
+                                @Override
+                                protected Integer doInBackground(String... params) {
+
+                                    return NetworkManager.deleteGroup(getApplicationContext(), pref.getString(LPSSharedPreferences.USER_ID, ""), groupInfo.id);
+
+                                }
+                                //메인쓰레드로
+                                @Override
+                                protected void onPostExecute(Integer aBoolean) {
+                                    LPSDAO.deleteItemGroup(getApplicationContext(), groupInfo);
+                                }
+                            }.execute("");
+
                             LPSDAO.deleteItemGroup(getApplicationContext(), groupInfo);
                             LPSDAO.deleteGroupInfo(getApplicationContext(), groupInfo);
                             dialog.cancel();
                             finish();
                         } else if(type == ITEM_DELETE){
+                            new AsyncTask<String, String, Integer>() {
+                                @Override
+                                protected Integer doInBackground(String... params) {
+
+                                    return NetworkManager.deleteItemGroup(getApplicationContext(), pref.getString(LPSSharedPreferences.USER_ID, ""), LPSDAO.getItemGroupID(getApplicationContext(),groupInfo,deleteItemInfo));
+
+                                }
+                                //메인쓰레드로
+                                @Override
+                                protected void onPostExecute(Integer aBoolean) {
+                                }
+                            }.execute("");
                             LPSDAO.deleteItemGroup(getApplicationContext(), deleteItemInfo, groupInfo);
+
                             itemsInGroup = LPSDAO.getItemListOfGroup(getApplicationContext(),groupInfo);
                             adapter.clear();
                             for(int i=0; i<itemsInGroup.size(); i++){
@@ -173,8 +223,29 @@ public class GroupInfoDetailActivity extends AppCompatActivity {
                 })
                 .setPositiveButton("네", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        //// TODO: 2016-06-04  알람업데이트 
                         for(int i=0; i<itemsInGroup.size(); i++){
                             itemsInGroup.get(i).alarmStatus = groupAlarmStatus;
+                            final String beaconID = itemsInGroup.get(i).beaconID;
+                            final String itemName = itemsInGroup.get(i).name;
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA);
+                            final String lossTime = sdf.format(new Date(itemsInGroup.get(i).lossTime.getTimeInMillis()));
+                            final int lock = itemsInGroup.get(i).lockToInt();
+
+                            new AsyncTask<String, String, Integer>() {
+                                @Override
+                                protected Integer doInBackground(String... params) {
+
+                                    return NetworkManager.editItem(getApplicationContext(),pref.getString(LPSSharedPreferences.USER_ID, ""),beaconID, itemName, lossTime, groupAlarmStatus, lock);
+
+                                }
+                                //메인쓰레드로
+                                @Override
+                                protected void onPostExecute(Integer aBoolean) {
+                                }
+                            }.execute("");
+
                             LPSDAO.updateItemInfoAlarmStatus(getApplicationContext(),itemsInGroup.get(i));
                         }
                         dialog.cancel();
@@ -205,8 +276,22 @@ public class GroupInfoDetailActivity extends AppCompatActivity {
                 .setPositiveButton("저장", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         groupInfo.name = input.getText().toString();
-                        LPSDAO.updateGroupInfoName(getApplicationContext(),groupInfo);
+                        
+                        new AsyncTask<String, String, Integer>() {
+                            @Override
+                            protected Integer doInBackground(String... params) {
+
+                                return NetworkManager.editGroup(getApplication(), pref.getString(LPSSharedPreferences.USER_ID, ""), groupInfo.name, groupInfo.id);
+
+                            }
+                            //메인쓰레드로
+                            @Override
+                            protected void onPostExecute(Integer aBoolean) {
+                                LPSDAO.updateGroupInfoName(getApplicationContext(),groupInfo);
+                            }
+                        }.execute("");
                         tvName.setText(groupInfo.name);
+                        
                         dialog.cancel();
                     }
                 });

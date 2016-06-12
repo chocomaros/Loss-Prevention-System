@@ -2,7 +2,9 @@ package com.example.yena.losspreventionsystem;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
@@ -27,6 +29,7 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
     private TextView tvName, tvBeaconID, tvLossTime;
     private RadioGroup rgAlarm;
     private ImageButton ibDelete, ibLock;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_item_info_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        pref = getSharedPreferences(LPSSharedPreferences.NAME, 0);
 
         Intent intent = getIntent();
         ItemInfo getItemInfo = (ItemInfo)intent.getSerializableExtra("ItemInfo");
@@ -114,6 +118,24 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
                         itemInfo.alarmStatus = AlarmManagement.ALARM_SOUND_VIBRATION;
                         break;
                 }
+
+
+                new AsyncTask<String, String, Integer>() {
+                    @Override
+                    protected Integer doInBackground(String... params) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA);
+                        return NetworkManager.editItem(getApplicationContext(), pref.getString(LPSSharedPreferences.USER_ID, ""), itemInfo.beaconID, itemInfo.name, sdf.format(new Date(itemInfo.lossTime.getTimeInMillis())), itemInfo.alarmStatus, itemInfo.lockToInt());
+                    }
+
+                    //메인쓰레드로
+                    @Override
+                    protected void onPostExecute(Integer aBoolean) {
+                        if (aBoolean==1){
+
+                        }
+                    }
+                }.execute("");
+
                 LPSDAO.updateItemInfoAlarmStatus(getApplicationContext(),itemInfo);
             }
         });
@@ -133,6 +155,31 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
                 })
                 .setPositiveButton("네", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
+                        new AsyncTask<String, String, Integer>() {
+                            @Override
+                            protected Integer doInBackground(String... params) {
+
+
+                                return NetworkManager.allItemdeleteItemGroup(getApplicationContext(), pref.getString(LPSSharedPreferences.USER_ID, ""), itemInfo.beaconID);
+
+                            }
+                            //메인쓰레드로
+                            @Override
+                            protected void onPostExecute(Integer aBoolean) {
+                            }
+                        }.execute("");
+                        new AsyncTask<String, String, Integer>() {
+                            @Override
+                            protected Integer doInBackground(String... params) {
+
+                                return NetworkManager.deleteItem(getApplicationContext(), pref.getString(LPSSharedPreferences.USER_ID, ""), itemInfo.beaconID);
+
+                            }
+                            //메인쓰레드로
+                            @Override
+                            protected void onPostExecute(Integer aBoolean) {
+                            }
+                        }.execute("");
                         LPSDAO.deleteItemGroup(getApplicationContext(), itemInfo);
                         LPSDAO.deleteItemInfo(getApplicationContext(), itemInfo);
                         dialog.cancel();
@@ -164,6 +211,22 @@ public class ItemInfoDetailActivity extends AppCompatActivity {
                 .setPositiveButton("저장", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         itemInfo.name = input.getText().toString();
+
+                        new AsyncTask<String, String, Integer>() {
+                            @Override
+                            protected Integer doInBackground(String... params) {
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA);
+                                return NetworkManager.editItem(getApplicationContext(), pref.getString(LPSSharedPreferences.USER_ID, ""), itemInfo.beaconID, itemInfo.name, sdf.format(new Date(itemInfo.lossTime.getTimeInMillis())), itemInfo.alarmStatus, itemInfo.lockToInt());
+                            }
+
+                            //메인쓰레드로
+                            @Override
+                            protected void onPostExecute(Integer aBoolean) {
+                                if (aBoolean==1){
+
+                                }
+                            }
+                        }.execute("");
                         LPSDAO.updateItemInfoName(getApplicationContext(), itemInfo);
                         tvName.setText(itemInfo.name);
                         dialog.cancel();

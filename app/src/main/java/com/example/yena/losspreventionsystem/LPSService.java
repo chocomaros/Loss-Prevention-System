@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -25,10 +26,13 @@ import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -104,7 +108,7 @@ public class LPSService extends Service implements BeaconConsumer {
 
     //===============비콘 거리 비교 ==================================
 
-    public void compareDistance(Beacon beacon) {
+    public void compareDistance(final Beacon beacon) {
         SharedPreferences pref;
         pref = getSharedPreferences(LPSSharedPreferences.NAME,0);
         int maxDistance = pref.getInt(LPSSharedPreferences.DISTANCE_SETTING,SettingFragment.DISTANCE1);
@@ -140,6 +144,26 @@ public class LPSService extends Service implements BeaconConsumer {
                             startActivity(popupIntent);
                             alarmManagement.generateLossNotification(itemList.get(i));
                         }
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA);
+                        final String beaconID = itemList.get(i).beaconID;
+                        final String lossTime = sdf.format(new Date(itemList.get(i).lossTime.getTimeInMillis()));
+                        final String userID = pref.getString(LPSSharedPreferences.USER_ID, "");
+                        new AsyncTask<String, String, Integer>() {
+                            @Override
+                            protected Integer doInBackground(String... params) {
+
+                                return NetworkManager.updateLossTime(getApplicationContext(), userID, beaconID, lossTime);
+                            }
+
+                            //메인쓰레드로
+                            @Override
+                            protected void onPostExecute(Integer aBoolean) {
+                                if (aBoolean==1){
+
+                                }
+                            }
+                        }.execute("");
                         LPSDAO.updateItemInfoLossCheck(getApplicationContext(),itemList.get(i));
                         LPSDAO.updateItemInfoLossTime(getApplicationContext(), itemList.get(i));
                     }

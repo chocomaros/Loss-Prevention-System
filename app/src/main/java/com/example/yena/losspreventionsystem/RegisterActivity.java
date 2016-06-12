@@ -2,6 +2,8 @@ package com.example.yena.losspreventionsystem;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v7.app.AlertDialog;
@@ -21,9 +23,12 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class RegisterActivity extends AppCompatActivity implements BeaconConsumer {
 
@@ -36,6 +41,8 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
 
     private int alarmStatusSelect;
     private boolean isExisted;
+    private SharedPreferences pref;
+    private BluetoothChecker bluetoothChecker;
 
     List<Beacon> beaconList = new ArrayList<>();
     ArrayList<ItemInfo> itemList = new ArrayList<>();
@@ -54,6 +61,9 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
         btCheck = (Button) findViewById(R.id.bt_check_id);
         btRegister = (Button) findViewById(R.id.bt_register);
 
+        pref = getSharedPreferences(LPSSharedPreferences.NAME,0);
+        bluetoothChecker = new BluetoothChecker();
+
         alarmStatusSelect = AlarmManagement.ALARM_VIBRATION;
         isExisted = false;
 
@@ -67,12 +77,13 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
         btCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                beaconManager.bind(RegisterActivity.this);
                 tvBeaconID.setText("");
 
                 // 비콘의 아이디와 거리를 측정하여 textView에 넣는다.
-                if(beaconList.size() == 0){
+                if (beaconList.size() == 0) {
                     printAlertDialog("비콘 확인", "주위에 비콘이 없습니다.");
-                } else{
+                } else {
                     ArrayList<Beacon> tempList = new ArrayList<Beacon>();
                     for (Beacon beacon : beaconList) {
                         if (REGISTER_DISTANCE > beacon.getDistance()) {
@@ -80,12 +91,12 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
                             Log.d("들어옴,거리 : ", beacon.getDistance() + "");
                         }
                     }
-                    if(tempList.size() == 0){
-                        printAlertDialog("비콘 확인", "등록할 물건을 "+REGISTER_DISTANCE+"m 안에 대주십시오.");
-                    } else if(tempList.size() == 1){
+                    if (tempList.size() == 0) {
+                        printAlertDialog("비콘 확인", "등록할 물건을 " + REGISTER_DISTANCE + "m 안에 대주십시오.");
+                    } else if (tempList.size() == 1) {
                         tvBeaconID.setText(tempList.get(0).getId1() + "");
-                    } else{
-                        printAlertDialog("비콘 확인", REGISTER_DISTANCE +"m 안에 비콘이 많습니다.");
+                    } else {
+                        printAlertDialog("비콘 확인", REGISTER_DISTANCE + "m 안에 비콘이 많습니다.");
                     }
                 }
             }
@@ -94,7 +105,7 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
         btRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ItemInfo itemInfo = new ItemInfo(tvBeaconID.getText().toString(), etName.getText().toString(), 0, alarmStatusSelect);
+                final ItemInfo itemInfo = new ItemInfo(tvBeaconID.getText().toString(), etName.getText().toString(), 0, alarmStatusSelect);
                 ArrayList<ItemInfo> itemList;
                 Log.d("register item", itemInfo.beaconID + "," + itemInfo.name);
                 itemList = LPSDAO.getItemInfo(getApplicationContext());
@@ -116,6 +127,9 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
                         if(itemInfo.beaconID.isEmpty()){
                             printAlertDialog("등록 오류", "비콘 아이디를 확인해주세요.");
                         } else{
+
+
+
                             LPSDAO.insertItemInfo(getApplicationContext(), itemInfo);
                             if (alarmStatusSelect != AlarmManagement.DISABLE) {
                                 BluetoothChecker bluetoothChecker = new BluetoothChecker();
@@ -123,7 +137,27 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
                                     startService(new Intent(RegisterActivity.this, LPSService.class));
                                 }
                             }
+
+
+                            new AsyncTask<String, String, Integer>() {
+                                @Override
+                                protected Integer doInBackground(String... params) {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.KOREA);
+                                    return NetworkManager.addItem(getApplicationContext(), pref.getString(LPSSharedPreferences.USER_ID, ""), itemInfo.beaconID, itemInfo.name, sdf.format(new Date(itemInfo.lossTime.getTimeInMillis())), itemInfo.alarmStatus, itemInfo.lockToInt());
+                                }
+
+                                //메인쓰레드로
+                                @Override
+                                protected void onPostExecute(Integer aBoolean) {
+                                    if (aBoolean==1){
+
+                                    }
+                                }
+                            }.execute("");
+
                             printAlertDialog("등록 완료", "등록이 완료되었습니다.");
+
+
                         }
                     }
                 }
@@ -157,6 +191,14 @@ public class RegisterActivity extends AppCompatActivity implements BeaconConsume
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(bluetoothChecker.btAdapter.enable()){
+            beaconManager.bind(this);
+        }
     }
 
     @Override

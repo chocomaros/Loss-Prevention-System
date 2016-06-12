@@ -97,14 +97,6 @@
             android:background="@color/gray"
             android:textColor="@color/white"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="중복 확인"
-            android:id="@+id/bt_check_id"
-            android:layout_below="@+id/et_signup_name"
-            android:layout_alignRight="@+id/et_signup_id"
-            android:layout_alignEnd="@+id/et_signup_id" />
     </RelativeLayout>
 
 
