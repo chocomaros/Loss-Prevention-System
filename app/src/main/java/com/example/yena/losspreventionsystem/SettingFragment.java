@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 public class SettingFragment extends Fragment {
 
-    public static final int DISTANCE1 = 5, DISTANCE2 = 10, DISTANCE3 = 15, DISTANCE4 = 20;
+    public static final int DISTANCE1 = 10, DISTANCE2 = 30, DISTANCE3 = 50, DISTANCE4 = 70;
 
     private SharedPreferences pref;
     private View view;

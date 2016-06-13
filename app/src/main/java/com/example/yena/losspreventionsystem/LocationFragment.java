@@ -31,7 +31,7 @@ import java.util.Collection;
 
 public class LocationFragment extends Fragment implements BeaconConsumer{
 
-    private static final int LARGE_CIRCLE_RANGE = 6, MIDDLE_CIRCLE_RANGE = 4, SMALL_CIRCLE_RANGE = 2;
+    private static final int LARGE_CIRCLE_RANGE = 70, MIDDLE_CIRCLE_RANGE = 40, SMALL_CIRCLE_RANGE = 20;
     private static final long AVERAGE_TIME = 2000l;
 
     private Spinner spinnerItemSelection;

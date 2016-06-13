@@ -19,7 +19,7 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/border"
             android:padding="10dp"
-            android:text="5m"
+            android:text="10m"
             android:textSize="20sp" />
 
         <RadioButton
@@ -29,7 +29,7 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/border"
             android:padding="10dp"
-            android:text="10m"
+            android:text="30m"
             android:textSize="20sp" />
 
         <RadioButton
@@ -39,7 +39,7 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/border"
             android:padding="10dp"
-            android:text="15m"
+            android:text="50m"
             android:textSize="20sp" />
 
         <RadioButton
@@ -49,7 +49,7 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/border"
             android:padding="10dp"
-            android:text="20m"
+            android:text="70m"
             android:textSize="20sp" />
     </RadioGroup>
 </LinearLayout>
